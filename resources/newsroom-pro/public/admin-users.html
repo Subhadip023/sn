@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Newsroom Pro — Admin Users</title>
+    <meta name="description" content="Manage newsroom roles and access." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { brand: { 500: '#5164ff', 400: '#7c8fff' } } } } };
+    </script>
+  </head>
+  <body class="bg-slate-950 text-slate-50">
+    <div class="min-h-screen grid lg:grid-cols-[260px_1fr]">
+      <aside class="border-r border-white/5 bg-white/5 flex flex-col">
+        <div class="p-4 flex items-center gap-2 text-lg font-semibold">
+          <div class="h-9 w-9 rounded-xl bg-brand-500 flex items-center justify-center text-white">N</div>
+          <div>
+            <div>Newsroom Pro</div>
+            <p class="text-xs text-slate-300">admin</p>
+          </div>
+        </div>
+        <nav class="px-3 space-y-2 text-sm">
+          <a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="./admin-dashboard.html">Dashboard</a>
+          <a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="./admin-content.html">Content</a>
+          <a class="block px-3 py-2 rounded-lg bg-white/10" href="./admin-users.html">Users</a>
+          <a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="./index.html">Site</a>
+        </nav>
+        <div class="mt-auto p-4 text-xs text-slate-300">Roles: Admin, Editor, Reporter</div>
+      </aside>
+
+      <main class="p-5 lg:p-8 space-y-6">
+        <header class="flex flex-wrap items-center gap-4 justify-between">
+          <div>
+            <p class="text-sm text-slate-300">Team</p>
+            <h1 class="text-2xl font-semibold">Manage users</h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <button id="themeBtn" class="px-4 py-2 rounded-lg border border-white/10 hover:border-white/30">Theme</button>
+            <a class="px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold" href="#inviteForm">Invite</a>
+          </div>
+        </header>
+
+        <section class="rounded-xl border border-white/10 bg-white/5 p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <input class="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none" type="search" placeholder="Search user" />
+              <select class="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-brand-400 focus:outline-none">
+                <option>All roles</option>
+                <option>Admin</option>
+                <option>Editor</option>
+                <option>Reporter</option>
+              </select>
+            </div>
+            <span class="text-sm text-slate-300">42 users</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="text-slate-300">
+                <tr class="text-left">
+                  <th class="py-2">Name</th>
+                  <th class="py-2">Email</th>
+                  <th class="py-2">Role</th>
+                  <th class="py-2">Status</th>
+                  <th class="py-2">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5">
+                <tr>
+                  <td class="py-2">Alex Morgan</td>
+                  <td class="py-2">alex@newsroom.com</td>
+                  <td class="py-2">Admin</td>
+                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs">Active</span></td>
+                  <td class="py-2 space-x-2">
+                    <button class="text-slate-200 hover:text-white">Edit</button>
+                    <button class="text-amber-200 hover:text-amber-100">Disable</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">Sam Lee</td>
+                  <td class="py-2">sam@newsroom.com</td>
+                  <td class="py-2">Editor</td>
+                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs">Active</span></td>
+                  <td class="py-2 space-x-2">
+                    <button class="text-slate-200 hover:text-white">Edit</button>
+                    <button class="text-amber-200 hover:text-amber-100">Disable</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">Jamie Ortiz</td>
+                  <td class="py-2">jamie@newsroom.com</td>
+                  <td class="py-2">Reporter</td>
+                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-slate-500/20 text-slate-200 text-xs">Invited</span></td>
+                  <td class="py-2 space-x-2">
+                    <button class="text-slate-200 hover:text-white">Edit</button>
+                    <button class="text-emerald-200 hover:text-emerald-100">Resend</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="inviteForm" class="rounded-xl border border-white/10 bg-white/5 p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold">Invite user</h2>
+            <span class="text-sm text-slate-300">Sends email (demo)</span>
+          </div>
+          <form class="grid md:grid-cols-2 gap-4" id="inviteUser">
+            <label class="space-y-2">
+              <span class="text-sm text-slate-200">Name</span>
+              <input class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none" required name="name" placeholder="Full name" />
+            </label>
+            <label class="space-y-2">
+              <span class="text-sm text-slate-200">Email</span>
+              <input class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none" required name="email" placeholder="user@example.com" type="email" />
+            </label>
+            <label class="space-y-2 md:col-span-2">
+              <span class="text-sm text-slate-200">Role</span>
+              <select class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white focus:border-brand-400 focus:outline-none" required name="role">
+                <option>Editor</option>
+                <option>Reporter</option>
+                <option>Admin</option>
+              </select>
+            </label>
+            <div class="flex items-center gap-3 md:col-span-2">
+              <button class="px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold" type="submit">Send invite</button>
+              <p class="text-sm text-emerald-200" id="inviteHint" role="status" aria-live="polite"></p>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+

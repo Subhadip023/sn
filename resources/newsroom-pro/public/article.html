@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Newsroom Pro — Article</title>
+    <meta name="description" content="Article detail page for Newsroom Pro." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { brand: { 500: '#5164ff', 400: '#7c8fff' } } } } };
+    </script>
+  </head>
+  <body class="bg-slate-950 text-slate-50">
+    <a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-brand-500 text-white px-3 py-2 rounded-md" href="#main">Skip to content</a>
+
+    <header class="sticky top-0 z-30 backdrop-blur bg-slate-950/90 border-b border-white/5">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
+        <a class="flex items-center gap-2 text-lg font-semibold" href="./index.html">
+          <img src="./assets/logo.svg" alt="Newsroom Pro logo" class="h-6 w-6" />
+          <span>Newsroom Pro</span>
+        </a>
+        <div class="flex items-center gap-2">
+          <button id="themeBtn" class="px-3 py-2 rounded-lg border border-white/10 hover:border-white/30 text-sm" type="button">Theme</button>
+          <button class="md:hidden p-2 rounded-lg border border-white/10 hover:border-white/20" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nav" type="button">
+            <span class="block h-[2px] w-5 bg-white mb-1"></span>
+            <span class="block h-[2px] w-5 bg-white"></span>
+          </button>
+          <nav id="nav" class="hidden md:flex items-center gap-6 text-sm text-slate-200">
+            <a class="hover:text-white" href="./index.html">Home</a>
+            <a class="hover:text-white" href="./category.html">Sections</a>
+            <a class="hover:text-white" href="./admin-dashboard.html">Admin</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+      <div class="space-y-3">
+        <div class="flex items-center gap-3 text-sm text-slate-300">
+          <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10">Tech</span>
+          <span>Oct 12, 2026</span>
+          <span>5 min read</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-semibold leading-tight">AI safety pact sets new disclosure rules</h1>
+        <p class="text-lg text-slate-300">Global leaders agreed to a framework for evaluating and publishing system cards on high-impact AI models.</p>
+        <div class="flex items-center gap-3 text-sm text-slate-300">
+          <span class="h-10 w-10 rounded-full bg-gradient-to-br from-brand-500/60 to-emerald-400/50"></span>
+          <div>
+            <div class="font-semibold text-white">Alex Morgan</div>
+            <div class="text-slate-300">Senior Reporter</div>
+          </div>
+        </div>
+      </div>
+
+      <figure class="rounded-2xl overflow-hidden border border-white/10 bg-white/5">
+        <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1400&q=80" alt="Conference audience" class="w-full h-80 object-cover" />
+        <figcaption class="text-sm text-slate-300 px-4 py-3 bg-slate-950/50">Delegates at the closing session of the AI Safety Summit.</figcaption>
+      </figure>
+
+      <article class="prose prose-invert max-w-none">
+        <p>The pact creates baseline disclosure for significant model releases, with red-team findings summarized in public “system cards.” A rapid response pathway will coordinate remediation when safety thresholds are crossed.</p>
+        <p>Officials expect the framework to iterate every six months. Observers welcomed the transparency push but pressed for clearer enforcement milestones.</p>
+        <h3>Key changes</h3>
+        <ul>
+          <li>Pre-deployment testing for high-risk domains</li>
+          <li>Escalation for newly discovered vulnerabilities</li>
+          <li>Standardized incident reporting timelines</li>
+        </ul>
+        <blockquote>The emphasis is on sunlight and speed — making sure risks surface early enough to fix, one delegate said.</blockquote>
+      </article>
+
+      <section class="space-y-4">
+        <h2 class="text-xl font-semibold">Related</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <a class="rounded-xl border border-white/10 bg-white/5 p-4 hover:border-white/30" href="./article.html">
+            <div class="text-xs text-slate-300">Policy</div>
+            <div class="font-semibold mt-1">EU finalizes AI Act timeline</div>
+          </a>
+          <a class="rounded-xl border border-white/10 bg-white/5 p-4 hover:border-white/30" href="./article.html">
+            <div class="text-xs text-slate-300">Research</div>
+            <div class="font-semibold mt-1">Open models gain audit tooling</div>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="py-10 border-t border-white/5">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+        <p>© <span id="year"></span> Newsroom Pro.</p>
+        <div class="flex items-center gap-4">
+          <a class="hover:text-white" href="./index.html">Home</a>
+          <a class="hover:text-white" href="./category.html">Sections</a>
+          <a class="hover:text-white" href="./admin-dashboard.html">Admin</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+

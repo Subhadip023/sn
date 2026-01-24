@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Newsroom Pro — Admin Content</title>
+    <meta name="description" content="Manage articles in Newsroom Pro admin panel." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { brand: { 500: '#5164ff', 400: '#7c8fff' } } } } };
+    </script>
+  </head>
+  <body class="bg-slate-950 text-slate-50">
+    <div class="min-h-screen grid lg:grid-cols-[260px_1fr]">
+      <aside class="border-r border-white/5 bg-white/5 flex flex-col">
+        <div class="p-4 flex items-center gap-2 text-lg font-semibold">
+          <div class="h-9 w-9 rounded-xl bg-brand-500 flex items-center justify-center text-white">N</div>
+          <div>
+            <div>Newsroom Pro</div>
+            <p class="text-xs text-slate-300">admin</p>
+          </div>
+        </div>
+        <nav class="px-3 space-y-2 text-sm">
+          <a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="./admin-dashboard.html">Dashboard</a>
+          <a class="block px-3 py-2 rounded-lg bg-white/10" href="./admin-content.html">Content</a>
+          <a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="./admin-users.html">Users</a>
+          <a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="./index.html">Site</a>
+        </nav>
+        <div class="mt-auto p-4 text-xs text-slate-300">Articles: 482</div>
+      </aside>
+
+      <main class="p-5 lg:p-8 space-y-6">
+        <header class="flex flex-wrap items-center gap-4 justify-between">
+          <div>
+            <p class="text-sm text-slate-300">Content</p>
+            <h1 class="text-2xl font-semibold">Manage articles</h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <button id="themeBtn" class="px-4 py-2 rounded-lg border border-white/10 hover:border-white/30">Theme</button>
+            <a class="px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold" href="#newArticleForm">New article</a>
+          </div>
+        </header>
+
+        <section class="rounded-xl border border-white/10 bg-white/5 p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <input class="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none" type="search" placeholder="Search title or author" />
+              <select class="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:border-brand-400 focus:outline-none">
+                <option>All sections</option>
+                <option>World</option>
+                <option>Tech</option>
+                <option>Business</option>
+              </select>
+            </div>
+            <span class="text-sm text-slate-300">482 items</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="text-slate-300">
+                <tr class="text-left">
+                  <th class="py-2">Title</th>
+                  <th class="py-2">Section</th>
+                  <th class="py-2">Status</th>
+                  <th class="py-2">Updated</th>
+                  <th class="py-2">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5">
+                <tr>
+                  <td class="py-2">AI safety pact sets disclosure rules</td>
+                  <td class="py-2">Tech</td>
+                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs">Published</span></td>
+                  <td class="py-2">10:04</td>
+                  <td class="py-2 space-x-2">
+                    <a class="text-brand-200 hover:text-brand-100" href="./article.html">View</a>
+                    <button class="text-slate-200 hover:text-white">Edit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">Streaming bundles return</td>
+                  <td class="py-2">Culture</td>
+                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-slate-500/20 text-slate-200 text-xs">Draft</span></td>
+                  <td class="py-2">09:40</td>
+                  <td class="py-2 space-x-2">
+                    <a class="text-brand-200 hover:text-brand-100" href="./article.html">View</a>
+                    <button class="text-slate-200 hover:text-white">Edit</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">Microgrids accelerate recovery</td>
+                  <td class="py-2">Climate</td>
+                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-amber-500/20 text-amber-200 text-xs">Review</span></td>
+                  <td class="py-2">09:12</td>
+                  <td class="py-2 space-x-2">
+                    <a class="text-brand-200 hover:text-brand-100" href="./article.html">View</a>
+                    <button class="text-slate-200 hover:text-white">Edit</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="newArticleForm" class="rounded-xl border border-white/10 bg-white/5 p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold">New article</h2>
+            <span class="text-sm text-slate-300">Draft</span>
+          </div>
+          
+          <!-- SEO Section -->
+          <div class="space-y-4 p-4 bg-white/5 rounded-lg border border-white/5">
+            <h3 class="font-medium text-brand-400">SEO Settings</h3>
+            
+            <!-- Meta Title -->
+            <div>
+              <label for="metaTitle" class="block text-sm font-medium mb-1">Meta Title</label>
+              <input type="text" id="metaTitle" name="metaTitle" maxlength="60" 
+                     class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none"
+                     placeholder="Keep it under 60 characters">
+              <p class="mt-1 text-xs text-slate-400">Recommended: 50-60 characters</p>
+            </div>
+            
+            <!-- Meta Description -->
+            <div>
+              <label for="metaDescription" class="block text-sm font-medium mb-1">Meta Description</label>
+              <textarea id="metaDescription" name="metaDescription" rows="2" maxlength="160"
+                        class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none"
+                        placeholder="A brief summary of the article for search results"></textarea>
+              <p class="mt-1 text-xs text-slate-400">Recommended: 120-160 characters</p>
+            </div>
+            
+            <!-- URL Slug -->
+            <div>
+              <label for="urlSlug" class="block text-sm font-medium mb-1">URL Slug</label>
+              <div class="flex">
+                <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-white/10 bg-white/5 text-slate-400 text-sm">
+                  https://example.com/article/
+                </span>
+                <input type="text" id="urlSlug" name="urlSlug" 
+                       class="flex-1 min-w-0 block w-full rounded-none rounded-r-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none"
+                       placeholder="article-url-slug" pattern="[a-z0-9]+(?:-[a-z0-9]+)*">
+              </div>
+              <p class="mt-1 text-xs text-slate-400">Use lowercase letters, numbers, and hyphens only</p>
+            </div>
+          </div>
+          <form class="grid md:grid-cols-2 gap-4" id="newArticle">
+            <div class="space-y-2 md:col-span-2">
+              <label for="headline" class="block text-sm font-medium text-slate-200">Headline</label>
+              <textarea id="headline" name="headline" rows="2" required
+                        class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none"
+                        placeholder="Enter article headline"></textarea>
+            </div>
+            <label class="space-y-2">
+              <span class="text-sm text-slate-200">Section</span>
+              <select class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white focus:border-brand-400 focus:outline-none" required name="section">
+                <option>World</option>
+                <option>Tech</option>
+                <option>Business</option>
+                <option>Climate</option>
+                <option>Culture</option>
+              </select>
+            </label>
+            <div class="space-y-2 md:col-span-2">
+              <label for="summary" class="block text-sm font-medium text-slate-200">Summary</label>
+              <textarea id="summary" name="summary" rows="4" required
+                        class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none"
+                        placeholder="Enter article summary"></textarea>
+            </div>
+            <div class="space-y-2 md:col-span-2">
+              <label for="body" class="block text-sm font-medium text-slate-200">Body</label>
+              <textarea id="body" name="body" rows="8" required
+                        class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none"
+                        placeholder="Write your article content here"></textarea>
+            </div>
+            <div class="flex items-center gap-3 md:col-span-2">
+              <button class="px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold" type="submit">Save draft</button>
+              <button class="px-4 py-2 rounded-lg border border-white/10 hover:border-white/30 text-white" type="button">Preview</button>
+              <p class="text-sm text-emerald-200" id="newArticleHint" role="status" aria-live="polite"></p>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+

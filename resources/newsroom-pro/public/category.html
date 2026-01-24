@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Newsroom Pro — Sections</title>
+    <meta name="description" content="Category listing for Newsroom Pro." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { theme: { extend: { colors: { brand: { 500: '#5164ff', 400: '#7c8fff' } } } } };
+    </script>
+  </head>
+  <body class="bg-slate-950 text-slate-50">
+    <a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-brand-500 text-white px-3 py-2 rounded-md" href="#main">Skip to content</a>
+
+    <header class="sticky top-0 z-30 backdrop-blur bg-slate-950/90 border-b border-white/5">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
+        <a class="flex items-center gap-2 text-lg font-semibold" href="./index.html">
+          <img src="./assets/logo.svg" alt="Newsroom Pro logo" class="h-6 w-6" />
+          <span>Newsroom Pro</span>
+        </a>
+        <div class="flex items-center gap-2">
+          <button id="themeBtn" class="px-3 py-2 rounded-lg border border-white/10 hover:border-white/30 text-sm" type="button">Theme</button>
+          <button class="md:hidden p-2 rounded-lg border border-white/10 hover:border-white/20" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nav" type="button">
+            <span class="block h-[2px] w-5 bg-white mb-1"></span>
+            <span class="block h-[2px] w-5 bg-white"></span>
+          </button>
+          <nav id="nav" class="hidden md:flex items-center gap-6 text-sm text-slate-200">
+            <a class="hover:text-white" href="./index.html">Home</a>
+            <a class="hover:text-white" href="./category.html">Sections</a>
+            <a class="hover:text-white" href="./admin-dashboard.html">Admin</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main id="main" class="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <p class="text-sm text-slate-300">Sections</p>
+          <h1 class="text-3xl font-semibold">Browse categories</h1>
+        </div>
+        <div class="flex flex-wrap gap-2" aria-label="Category filters">
+          <button class="px-3 py-2 rounded-full bg-white/10 border border-white/10 text-sm hover:border-white/30" type="button">All</button>
+          <button class="px-3 py-2 rounded-full bg-white/5 border border-white/10 text-sm hover:border-white/30" type="button">World</button>
+          <button class="px-3 py-2 rounded-full bg-white/5 border border-white/10 text-sm hover:border-white/30" type="button" id="tech">Tech</button>
+          <button class="px-3 py-2 rounded-full bg-white/5 border border-white/10 text-sm hover:border-white/30" type="button" id="business">Business</button>
+          <button class="px-3 py-2 rounded-full bg-white/5 border border-white/10 text-sm hover:border-white/30" type="button">Climate</button>
+        </div>
+      </div>
+
+      <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <article class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+          <div class="text-xs text-slate-300">World • 2h ago</div>
+          <a class="text-lg font-semibold hover:text-white" href="./article.html">Ceasefire talks resume with progress</a>
+          <p class="text-sm text-slate-300">Mediators cite movement on humanitarian access.</p>
+        </article>
+        <article class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+          <div class="text-xs text-slate-300">Tech • 1h ago</div>
+          <a class="text-lg font-semibold hover:text-white" href="./article.html">Developers rally around open model hubs</a>
+          <p class="text-sm text-slate-300">Community evals build trust and reuse.</p>
+        </article>
+        <article class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+          <div class="text-xs text-slate-300">Business • 3h ago</div>
+          <a class="text-lg font-semibold hover:text-white" href="./article.html">Earnings season favors efficiency</a>
+          <p class="text-sm text-slate-300">Operators highlight margin discipline.</p>
+        </article>
+        <article class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+          <div class="text-xs text-slate-300">Climate • 4h ago</div>
+          <a class="text-lg font-semibold hover:text-white" href="./article.html">Microgrids speed storm recovery</a>
+          <p class="text-sm text-slate-300">Cities adopt modular backup systems.</p>
+        </article>
+        <article class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+          <div class="text-xs text-slate-300">Culture • 5h ago</div>
+          <a class="text-lg font-semibold hover:text-white" href="./article.html">Indie festivals go hybrid</a>
+          <p class="text-sm text-slate-300">Organizers blend streams with premieres.</p>
+        </article>
+        <article class="rounded-2xl border border-white/10 bg-white/5 p-4 space-y-2">
+          <div class="text-xs text-slate-300">Science • 6h ago</div>
+          <a class="text-lg font-semibold hover:text-white" href="./article.html">New material cuts cooling costs</a>
+          <p class="text-sm text-slate-300">Data centers test a 20% energy drop.</p>
+        </article>
+      </section>
+
+      <section class="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-semibold">Newsletter</h2>
+          <span class="text-sm text-slate-300">Daily brief</span>
+        </div>
+        <form class="space-y-3" id="categorySignup">
+          <input class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-400 focus:border-brand-400 focus:outline-none" type="email" required placeholder="you@example.com" />
+          <button class="w-full inline-flex items-center justify-center px-4 py-3 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold shadow-lg shadow-brand-500/30" type="submit">Subscribe</button>
+          <p class="text-sm text-emerald-200" id="categoryHint" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="py-10 border-t border-white/5">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+        <p>© <span id="year"></span> Newsroom Pro.</p>
+        <div class="flex items-center gap-4">
+          <a class="hover:text-white" href="./index.html">Home</a>
+          <a class="hover:text-white" href="./category.html">Sections</a>
+          <a class="hover:text-white" href="./admin-dashboard.html">Admin</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Newsroom Pro — Admin Dashboard</title>
+    <meta name="description" content="Admin overview for Newsroom Pro with activity, stats, and theme toggle." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { brand: { 500: '#5164ff', 400: '#7c8fff' }, ink: '#0b1221' }
+          }
+        }
+      };
+    </script>
+  </head>
+  <body class="bg-slate-950 text-slate-50">
+    <div class="min-h-screen grid lg:grid-cols-[260px_1fr]">
+      <aside class="border-r border-white/5 bg-white/5 flex flex-col">
+        <div class="p-4 flex items-center gap-2 text-lg font-semibold">
+          <div class="h-9 w-9 rounded-xl bg-brand-500 flex items-center justify-center text-white">N</div>
+          <div>
+            <div>Newsroom Pro</div>
+            <p class="text-xs text-slate-300">admin</p>
+          </div>
+        </div>
+        <nav class="px-3 space-y-2 text-sm">
+          <a class="block px-3 py-2 rounded-lg bg-white/10" href="./admin-dashboard.html">Dashboard</a>
+          <a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="./admin-content.html">Content</a>
+          <a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="./admin-users.html">Users</a>
+          <a class="block px-3 py-2 rounded-lg hover:bg-white/5" href="./index.html">Site</a>
+        </nav>
+        <div class="mt-auto p-4 text-xs text-slate-300">Connected: newsroom / prod</div>
+      </aside>
+
+      <main class="p-5 lg:p-8 space-y-6">
+        <header class="flex flex-wrap items-center gap-4 justify-between">
+          <div>
+            <p class="text-sm text-slate-300">Overview</p>
+            <h1 class="text-2xl font-semibold">Publishing health</h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <button id="themeBtn" class="px-4 py-2 rounded-lg border border-white/10 hover:border-white/30">Theme</button>
+            <a class="px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold" href="./admin-content.html">Open content</a>
+          </div>
+        </header>
+
+        <section class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+            <p class="text-sm text-slate-300">Published</p>
+            <div class="text-3xl font-semibold">482</div>
+            <p class="text-xs text-emerald-300 mt-1">+12 this week</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+            <p class="text-sm text-slate-300">Drafts</p>
+            <div class="text-3xl font-semibold">34</div>
+            <p class="text-xs text-amber-300 mt-1">Needs review</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+            <p class="text-sm text-slate-300">Scheduled</p>
+            <div class="text-3xl font-semibold">18</div>
+            <p class="text-xs text-slate-300 mt-1">Next 24h</p>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+            <p class="text-sm text-slate-300">Editors online</p>
+            <div class="text-3xl font-semibold" id="editorsCount">7</div>
+            <p class="text-xs text-emerald-300 mt-1">Live</p>
+          </div>
+        </section>
+
+        <section class="grid lg:grid-cols-[1.1fr_0.9fr] gap-4">
+          <div class="rounded-xl border border-white/10 bg-white/5 p-5 space-y-4">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-semibold">Engagement</h2>
+              <span class="text-xs text-slate-300">Last 7 days</span>
+            </div>
+            <div class="h-48 rounded-lg bg-gradient-to-br from-brand-500/20 via-emerald-400/10 to-cyan-400/15"></div>
+            <ul class="text-sm text-slate-200 space-y-1">
+              <li>— Sessions up 14% driven by newsletter traffic.</li>
+              <li>— Average time on page 4m12s across features.</li>
+            </ul>
+          </div>
+          <div class="rounded-xl border border-white/10 bg-white/5 p-5 space-y-4">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-semibold">Recent activity</h2>
+              <span class="text-xs text-slate-300">Live</span>
+            </div>
+            <div id="activity" class="space-y-3 text-sm text-slate-100">
+              <div class="flex items-center justify-between bg-white/5 px-3 py-2 rounded-lg"><span>Published: Battery leap doubles EV range</span><span class="text-slate-400">10:04</span></div>
+              <div class="flex items-center justify-between bg-white/5 px-3 py-2 rounded-lg"><span>Scheduled: Climate Q&A</span><span class="text-slate-400">09:58</span></div>
+              <div class="flex items-center justify-between bg-white/5 px-3 py-2 rounded-lg"><span>Draft updated: AI safety explainer</span><span class="text-slate-400">09:42</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-xl border border-white/10 bg-white/5 p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-semibold">Content queue</h2>
+            <button class="text-sm px-3 py-2 rounded-lg border border-white/10 hover:border-white/30" id="refreshQueue" type="button">Refresh</button>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="text-slate-300">
+                <tr class="text-left">
+                  <th class="py-2">Title</th>
+                  <th class="py-2">Section</th>
+                  <th class="py-2">Status</th>
+                  <th class="py-2">Updated</th>
+                  <th class="py-2">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5" id="queueTable">
+                <tr>
+                  <td class="py-2">AI safety pact disclosure rules</td>
+                  <td class="py-2">Tech</td>
+                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-200 text-xs">Published</span></td>
+                  <td class="py-2">10:04</td>
+                  <td class="py-2 space-x-2">
+                    <a class="text-brand-200 hover:text-brand-100" href="./article.html">View</a>
+                    <a class="text-slate-200 hover:text-white" href="./admin-content.html">Edit</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">Streaming bundles return</td>
+                  <td class="py-2">Culture</td>
+                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-slate-500/20 text-slate-200 text-xs">Draft</span></td>
+                  <td class="py-2">09:40</td>
+                  <td class="py-2 space-x-2">
+                    <a class="text-brand-200 hover:text-brand-100" href="./article.html">View</a>
+                    <a class="text-slate-200 hover:text-white" href="./admin-content.html">Edit</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-2">Microgrids accelerate recovery</td>
+                  <td class="py-2">Climate</td>
+                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-amber-500/20 text-amber-200 text-xs">Review</span></td>
+                  <td class="py-2">09:12</td>
+                  <td class="py-2 space-x-2">
+                    <a class="text-brand-200 hover:text-brand-100" href="./article.html">View</a>
+                    <a class="text-slate-200 hover:text-white" href="./admin-content.html">Edit</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+
