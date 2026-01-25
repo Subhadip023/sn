@@ -11,7 +11,7 @@ class UpdateArticlesRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,20 @@ class UpdateArticlesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'required|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:articles,slug,' . $this->route('article')->id,
+            'content' => 'required|string',
+            'excerpt' => 'nullable|string',
+            'category_id' => 'required|exists:categories,id',
+            'author_id' => 'nullable|exists:users,id',
+            'status' => 'required|in:draft,published',
+            'featured_image' => 'nullable|image|max:2048',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string',
+            'canonical_url' => 'nullable|url',
         ];
     }
 }
