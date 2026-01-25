@@ -2,9 +2,16 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Page;
 Route::get('/', function () {
-    return view('welcome');
+    $pages = Page::where('active', true)->get()->toArray();
+    return view('welcome')->with('pages', $pages);
+});
+
+Route::get('/{slug}', function ($slug) {
+    $page = Page::where('slug', $slug)->first();
+    $pages = Page::where('active', true)->get()->toArray();
+    return view('page')->with('page', $page)->with('pages', $pages);
 });
 
 Route::get('/dashboard', function () {

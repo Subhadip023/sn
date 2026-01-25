@@ -121,6 +121,8 @@
         input[type="checkbox"]:checked~.checkbox-checkmark:after {
             display: block;
         }
+
+        
     </style>
 
 </head>
@@ -164,15 +166,12 @@
     <nav class="bg-white border-b border-gray-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4">
             <ul class="flex overflow-x-auto whitespace-nowrap py-2.5 gap-5">
-                <li class="active"><a href="#" class="py-2.5 font-medium text-primary-red border-b-2 border-primary-red block"><i class="fas fa-home mr-1"></i> Home</a></li>
-                <li><a href="./public/latest_news.html" class="py-2.5 font-medium text-gray-800 hover:text-primary-red transition-colors block">Latest News</a></li>
-                <li><a href="#" class="py-2.5 font-medium text-gray-800 hover:text-primary-red transition-colors block">India</a></li>
-                <li><a href="#" class="py-2.5 font-medium text-gray-800 hover:text-primary-red transition-colors block">World</a></li>
-                <li><a href="#" class="py-2.5 font-medium text-gray-800 hover:text-primary-red transition-colors block">Business</a></li>
-                <li><a href="#" class="py-2.5 font-medium text-gray-800 hover:text-primary-red transition-colors block">Sports</a></li>
-                <li><a href="#" class="py-2.5 font-medium text-gray-800 hover:text-primary-red transition-colors block">Entertainment</a></li>
-                <li><a href="#" class="py-2.5 font-medium text-gray-800 hover:text-primary-red transition-colors block">Technology</a></li>
-                <li><a href="#" class="py-2.5 font-medium text-gray-800 hover:text-primary-red transition-colors block">More <i class="fas fa-chevron-down ml-1"></i></a></li>
+                <li class=""><a href="/" class="py-2.5 font-medium{{ request()->is('/') ? 'text-primary-red hover:text-gray-800 border-b-2 border-primary-red' : 'text-gray-800 hover:text-primary-red' }}   block"><i class="fas fa-home mr-1"></i> Home</a></li>
+                @foreach ($pages as $page)
+                <li class="{{ request()->is($page['slug']) ? 'text-primary-red' : '' }}"><a href="{{ $page['slug'] }}" class="py-2.5 font-medium {{ request()->is($page['slug']) ? 'text-primary-red hover:text-gray-800 border-b-2 border-primary-red' : 'text-gray-800 hover:text-primary-red' }}   transition-colors block">{{ $page['title'] }}</a></li>
+                @endforeach
+                
+                
             </ul>
         </div>
     </nav>

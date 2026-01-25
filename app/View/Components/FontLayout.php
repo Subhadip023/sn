@@ -10,10 +10,12 @@ class FontLayout extends Component
 {
         
     public ?string $title;
+    public ?array $pages=[];
 
-    public function __construct($title=null)
+    public function __construct($title=null, $pages=[])
     {
         $this->title = $title;
+        $this->pages = $pages;
     }
 
     /**
