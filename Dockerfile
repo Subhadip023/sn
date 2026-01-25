@@ -21,7 +21,8 @@ RUN apt-get update && apt-get install -y \
         gd \
         zip \
         intl \
-        exif
+        exif \
+    && rm /etc/nginx/sites-enabled/default
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
@@ -32,7 +33,7 @@ WORKDIR /var/www
 # Copy project files
 COPY . .
 
-# Install PHP dependencies (NO scripts during build)
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # Laravel permissions
@@ -43,4 +44,4 @@ COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
-CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
+CMD php-fpm -D && nginx -g 'daemon off;'
