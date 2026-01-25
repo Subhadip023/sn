@@ -33,6 +33,9 @@ WORKDIR /var/www
 # Copy project files
 COPY . .
 
+# 🔥 Build frontend assets (Tailwind / Vite)
+RUN npm install && npm run build
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-scripts
 
