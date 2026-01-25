@@ -1,7 +1,7 @@
 <x-font-layout title="Welcome">
       <div class="max-w-3xl mx-auto py-5">
             <header class="mb-8">
-                <span class="inline-block bg-primary-red text-white px-4 py-1.5 rounded text-sm mb-4">{{ $article->category->name }}</span>
+                <span class="inline-block bg-primary-red text-white px-4 py-1.5 rounded text-sm mb-4">{{ $article->category->title }}</span>
                 <h1 class="text-4xl md:text-5xl font-semibold mb-4 leading-tight text-gray-800">{{ $article->title }}</h1>
                 <div class="flex flex-wrap items-center gap-5 text-sm text-gray-500 mb-5 pb-4 border-b border-gray-200">
                     <span class="flex items-center"><i class="far fa-user mr-1.5"></i> {{ $article->author->name }}</span>
@@ -16,11 +16,13 @@
             
             <div class="text-lg leading-relaxed text-gray-800">
                 <p class="mb-5">{{$article->excerpt}}</p>
+                 
                 
-                @php
-                    $content = $article->content;
-                    echo $content;
-                @endphp    
+                
+                <div class="prose prose-lg max-w-none text-gray-800">
+                    {!! $article->content !!}
+                </div>
+
             </div>
 
             
