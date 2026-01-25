@@ -46,7 +46,6 @@ class ArticlesController extends Controller
         if ($request->hasFile('featured_image')) {
             $path = $request->file('featured_image')->store('articles', 'public');
             $data['featured_image'] = $path;
-            $data['featured_image_url'] = '/storage/' . $path;
         }
 
         if ($data['status'] === 'published' && empty($data['published_at'])) {
@@ -79,9 +78,9 @@ class ArticlesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Articles $articles)
+    public function show(Articles $article)
     {
-        //
+        return view('admin.articles.show', compact('article'));
     }
 
     /**
