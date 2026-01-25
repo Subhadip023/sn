@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Newsroom Pro — Admin Dashboard</title>
+  <title>{{ config('app.name', 'Laravel') }} - {{ $title }}</title>
   <meta name="description" content="Admin overview for Newsroom Pro with activity, stats, and theme toggle." />
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
   <script src="https://cdn.tailwindcss.com"></script>

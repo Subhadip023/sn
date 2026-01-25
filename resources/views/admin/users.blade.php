@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-admin-layout title="Users">
         <header class="flex flex-wrap items-center gap-4 justify-between">
           <div>
             <p class="text-sm text-slate-500">Team</p>
@@ -35,9 +35,11 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100">
+                @if(isset($users))
+                @foreach($users as $user)
                 <tr>
-                  <td class="py-2 text-slate-900">Alex Morgan</td>
-                  <td class="py-2 text-slate-600">alex@newsroom.com</td>
+                  <td class="py-2 text-slate-900">{{ $user->name }}</td>
+                  <td class="py-2 text-slate-600">{{ $user->email }}</td>
                   <td class="py-2 text-slate-600">Admin</td>
                   <td class="py-2"><span class="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-medium">Active</span></td>
                   <td class="py-2 space-x-2">
@@ -45,26 +47,13 @@
                     <button class="text-amber-600 hover:text-amber-700">Disable</button>
                   </td>
                 </tr>
+                @endforeach
+                @else
                 <tr>
-                  <td class="py-2 text-slate-900">Sam Lee</td>
-                  <td class="py-2 text-slate-600">sam@newsroom.com</td>
-                  <td class="py-2 text-slate-600">Editor</td>
-                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-medium">Active</span></td>
-                  <td class="py-2 space-x-2">
-                    <button class="text-slate-500 hover:text-slate-700">Edit</button>
-                    <button class="text-amber-600 hover:text-amber-700">Disable</button>
-                  </td>
+                  No users yet
                 </tr>
-                <tr>
-                  <td class="py-2 text-slate-900">Jamie Ortiz</td>
-                  <td class="py-2 text-slate-600">jamie@newsroom.com</td>
-                  <td class="py-2 text-slate-600">Reporter</td>
-                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">Invited</span></td>
-                  <td class="py-2 space-x-2">
-                    <button class="text-slate-500 hover:text-slate-700">Edit</button>
-                    <button class="text-emerald-600 hover:text-emerald-700">Resend</button>
-                  </td>
-                </tr>
+                @endif
+               
               </tbody>
             </table>
           </div>

@@ -11,9 +11,11 @@ class AdminLayout extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public ?string $title = 'Admin';
+
+    public function __construct($title = null)
     {
-        //
+        $this->title = $title;
     }
 
     /**

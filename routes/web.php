@@ -37,7 +37,8 @@ Route::get('/admin/content', function () {
 })->name('admin.content');
 
 Route::get('/admin/users', function () {
-    return view('admin.users');
+    $users = \App\Models\User::all();
+    return view('admin.users')->with('users', $users);
 })->name('admin.users');
 
 Route::get('/admin/content', function () {
