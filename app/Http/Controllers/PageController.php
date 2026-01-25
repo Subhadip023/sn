@@ -13,7 +13,10 @@ class PageController extends Controller
      */
     public function index()
     {
-        //
+        $pages = Page::all();
+        $length = $pages->count();
+
+        return view('admin.pages.index', compact('pages', 'length'));
     }
 
     /**
@@ -21,7 +24,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.pages.create');
     }
 
     /**
@@ -29,7 +32,16 @@ class PageController extends Controller
      */
     public function store(StorePageRequest $request)
     {
-        //
+        try {
+            $valData = $request->validated();
+            if (!isset($valData['slug'])) {
+                $valData['slug'] = str($valData['title'])->slug();
+            }
+            Page::create($valData);
+            return redirect()->route('pages.index')->with('success', 'Page created successfully');
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     /**
