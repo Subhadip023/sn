@@ -46,7 +46,7 @@
                             </span>
                         </td>
                         <td class="py-2 text-slate-600">{{ $article->views }}</td>
-                        <td class="py-2 text-slate-500">{{ $article->published_at ? $article->published_at->format('M d, Y') : '-' }}</td>
+                        <td class="py-2 text-slate-500">{{ $article->published_at ?? '-' }}</td>
                         <td class="py-2">
                             <a href="{{ route('articles.show', $article) }}" class="text-brand-600 hover:text-brand-700 font-medium">view</a>
                             <form action="{{ route('articles.destroy', $article) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this article?');">
