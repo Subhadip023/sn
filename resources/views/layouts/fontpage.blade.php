@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,10 @@
     <!-- <script src="https://cdn.tailwindcss.com"></script>
       -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -20,8 +24,107 @@
             }
         }
     </script>
-    
+
+    <style>
+        @keyframes ticker {
+            0% {
+                transform: translateY(0);
+            }
+
+            25% {
+                transform: translateY(-100%);
+            }
+
+            50% {
+                transform: translateY(-200%);
+            }
+
+            75% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .ticker ul {
+            animation: ticker 20s linear infinite;
+        }
+
+        @keyframes bounce {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-10px);
+            }
+        }
+
+        .loader-logo .n {
+            animation: bounce 1s infinite alternate;
+        }
+
+        .loader-logo .p {
+            animation: bounce 1s 0.2s infinite alternate;
+        }
+
+        @keyframes progress {
+            0% {
+                width: 0%;
+                transform: translateX(-50%);
+            }
+
+            50% {
+                width: 100%;
+                transform: translateX(0);
+            }
+
+            100% {
+                width: 0%;
+                transform: translateX(100%);
+            }
+        }
+
+        .loader-progress {
+            animation: progress 1.5s ease-in-out infinite;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-overlay.active .popup-content {
+            transform: translateY(0);
+        }
+
+        .checkbox-checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 7px;
+            top: 3px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        input[type="checkbox"]:checked~.checkbox-checkmark {
+            background-color: #e31837;
+            border-color: #e31837;
+        }
+
+        input[type="checkbox"]:checked~.checkbox-checkmark:after {
+            display: block;
+        }
+    </style>
+
 </head>
+
 <body class="bg-white text-gray-800">
     <!-- Top Navigation -->
     <nav class="bg-gray-100 border-b border-gray-200 text-sm py-1">
@@ -32,10 +135,10 @@
                 <span onclick="showPopup();" class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-bell mr-1"></i> Daily Newsletter</span>
             </div>
             @auth
-                <a href="{{ route('dashboard') }}">
-                    <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-user mr-1"></i> Dashboard</span>
-                </a>
-            @endauth    
+            <a href="{{ route('dashboard') }}">
+                <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-user mr-1"></i> Dashboard</span>
+            </a>
+            @endauth
             @guest
             <a href="{{ route('login') }}">
                 <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-sign-in-alt mr-1"></i> Sign In</span>
@@ -76,7 +179,7 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4">
-      {{ $slot }}
+        {{ $slot }}
     </main>
 
     <!-- Footer -->
@@ -122,8 +225,8 @@
         </div>
     </footer>
 
-   <x-ui.loader />
-    
+    <x-ui.loader />
+
     <!-- Subscription Popup -->
     <div id="subscriptionPopup" class="popup-overlay fixed inset-0 bg-black/70 flex justify-center items-center z-[1000] opacity-0 invisible transition-all duration-300">
         <div class="popup-content bg-white rounded-lg w-[90%] max-w-md p-8 relative transform -translate-y-12 transition-transform duration-300">
@@ -151,5 +254,5 @@
     <!-- user assert for js not vite -->
     <script src="{{ asset('js/script.js') }}"></script>
 </body>
-</html>
 
+</html>

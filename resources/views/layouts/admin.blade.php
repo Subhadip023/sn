@@ -12,64 +12,105 @@
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 
   <style>
-        @keyframes ticker {
-            0% { transform: translateY(0); }
-            25% { transform: translateY(-100%); }
-            50% { transform: translateY(-200%); }
-            75% { transform: translateY(-100%); }
-            100% { transform: translateY(0); }
-        }
-        .ticker ul {
-            animation: ticker 20s linear infinite;
-        }
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-10px); }
-        }
-        .loader-logo .n {
-            animation: bounce 1s infinite alternate;
-        }
-        .loader-logo .p {
-            animation: bounce 1s 0.2s infinite alternate;
-        }
-        @keyframes progress {
-            0% { width: 0%; transform: translateX(-50%); }
-            50% { width: 100%; transform: translateX(0); }
-            100% { width: 0%; transform: translateX(100%); }
-        }
-        .loader-progress {
-            animation: progress 1.5s ease-in-out infinite;
-        }
-        .popup-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .popup-overlay.active .popup-content {
-            transform: translateY(0);
-        }
-        .checkbox-checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-            left: 7px;
-            top: 3px;
-            width: 5px;
-            height: 10px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-        input[type="checkbox"]:checked ~ .checkbox-checkmark {
-            background-color: #e31837;
-            border-color: #e31837;
-        }
-        input[type="checkbox"]:checked ~ .checkbox-checkmark:after {
-            display: block;
-        }
-    </style>
+    @keyframes ticker {
+      0% {
+        transform: translateY(0);
+      }
+
+      25% {
+        transform: translateY(-100%);
+      }
+
+      50% {
+        transform: translateY(-200%);
+      }
+
+      75% {
+        transform: translateY(-100%);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .ticker ul {
+      animation: ticker 20s linear infinite;
+    }
+
+    @keyframes bounce {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-10px);
+      }
+    }
+
+    .loader-logo .n {
+      animation: bounce 1s infinite alternate;
+    }
+
+    .loader-logo .p {
+      animation: bounce 1s 0.2s infinite alternate;
+    }
+
+    @keyframes progress {
+      0% {
+        width: 0%;
+        transform: translateX(-50%);
+      }
+
+      50% {
+        width: 100%;
+        transform: translateX(0);
+      }
+
+      100% {
+        width: 0%;
+        transform: translateX(100%);
+      }
+    }
+
+    .loader-progress {
+      animation: progress 1.5s ease-in-out infinite;
+    }
+
+    .popup-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .popup-overlay.active .popup-content {
+      transform: translateY(0);
+    }
+
+    .checkbox-checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 7px;
+      top: 3px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    input[type="checkbox"]:checked~.checkbox-checkmark {
+      background-color: #e31837;
+      border-color: #e31837;
+    }
+
+    input[type="checkbox"]:checked~.checkbox-checkmark:after {
+      display: block;
+    }
+  </style>
   <script>
     tailwind.config = {
       theme: {
@@ -179,7 +220,7 @@
       @endif
       {{ $slot }}
     </main>
-      <x-ui.loader />
+    <x-ui.loader />
 
   </div>
 
