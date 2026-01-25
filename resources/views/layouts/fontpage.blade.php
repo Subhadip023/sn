@@ -26,6 +26,9 @@
         @if(isset($meta['og_image']))
             <meta property="og:image" content="{{ $meta['og_image'] }}">
         @endif
+        @if(isset($meta['og_image_url']))
+            <meta property="og:image" content="{{ $meta['og_image_url'] }}">
+        @endif
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
@@ -34,6 +37,9 @@
         <meta property="twitter:description" content="{{ $meta['description'] ?? '' }}">
         @if(isset($meta['og_image']))
             <meta property="twitter:image" content="{{ $meta['og_image'] }}">
+        @endif
+        @if(isset($meta['og_image_url']))
+            <meta property="twitter:image" content="{{ $meta['og_image_url'] }}">
         @endif
     @endif
     
