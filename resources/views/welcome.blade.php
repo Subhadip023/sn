@@ -1,4 +1,4 @@
-<x-font-layout title="Home" :pages="$pages">
+<x-font-layout title="Home" :pages="$pages ?? []">
       <!-- Breaking News Ticker -->
         <div class="bg-gray-100 py-2 my-4 border-l-4 border-primary-red flex items-center">
             <span class="bg-primary-red text-white px-3 py-0.5 mr-4 font-semibold uppercase text-xs whitespace-nowrap">Breaking:</span>

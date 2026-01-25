@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'Sohoj News' }}</title>
+    <title>{{  'Sohoj News | '. $title ?? 'Sohoj News' }}</title>
     <!-- <script src="https://cdn.tailwindcss.com"></script>
       -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -121,11 +121,16 @@
         input[type="checkbox"]:checked~.checkbox-checkmark:after {
             display: block;
         }
-
-        
     </style>
 
 </head>
+@php
+    $active =  false;
+    if(isset($page)){
+        $active = request()->is('page/'.$page->slug) ?? false;
+    }
+@endphp
+
 
 <body class="bg-white text-gray-800">
     <!-- Top Navigation -->
@@ -167,11 +172,12 @@
         <div class="max-w-7xl mx-auto px-4">
             <ul class="flex overflow-x-auto whitespace-nowrap py-2.5 gap-5">
                 <li class=""><a href="/" class="py-2.5 font-medium{{ request()->is('/') ? 'text-primary-red hover:text-gray-800 border-b-2 border-primary-red' : 'text-gray-800 hover:text-primary-red' }}   block"><i class="fas fa-home mr-1"></i> Home</a></li>
+                @if(count($pages) > 0)
                 @foreach ($pages as $page)
-                <li class="{{ request()->is($page['slug']) ? 'text-primary-red' : '' }}"><a href="{{ $page['slug'] }}" class="py-2.5 font-medium {{ request()->is($page['slug']) ? 'text-primary-red hover:text-gray-800 border-b-2 border-primary-red' : 'text-gray-800 hover:text-primary-red' }}   transition-colors block">{{ $page['title'] }}</a></li>
+                <li class="{{ $active ? 'text-primary-red' : '' }}"><a href="/page/{{ $page['slug'] }}" class="py-2.5 font-medium {{ $active ? 'text-primary-red hover:text-gray-800 border-b-2 border-primary-red' : 'text-gray-800 hover:text-primary-red' }}   transition-colors block">{{ $page['title'] }}</a></li>
                 @endforeach
-                
-                
+                @endif
+
             </ul>
         </div>
     </nav>

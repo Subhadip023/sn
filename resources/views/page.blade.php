@@ -1,4 +1,4 @@
-<x-font-layout title="{{ $page->title }}" :pages="$pages">
+<x-font-layout title="{{ $page->title ?? 'Welcome }}" :pages="$pages ?? []">
      <div class="my-6">
             <h1 class="text-3xl font-semibold mb-2">{{ $page->title }}</h1>
             <div class="text-sm text-gray-600">
