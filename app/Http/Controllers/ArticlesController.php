@@ -134,16 +134,9 @@ class ArticlesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Articles $articles) // Note: route model binding uses 'articles' param name usually? Check route:resource. 'articles' -> {article} usually. But model is Articles.
+    public function destroy(Articles $article)
     {
-        // Laravel might bind {article} to class Articles if parameter matches. Resource param is singular by default.
-        // But model name is plural 'Articles'.
-        // Route::resource('articles', ...) -> param is {article}.
-        // Typehint: destroy(Articles $article)
-        
-        // However, standard resource uses singular param name.
-        // Let's assume Laravel resolves it or user fixes it. I will keep $articles var name to match stub for now, but rename logically.
-        $articles->delete();
+        $article->delete();
         return redirect()->route('articles.index')->with('success', 'Article deleted successfully.');
     }
 }
