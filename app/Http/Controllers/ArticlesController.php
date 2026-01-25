@@ -80,23 +80,55 @@ class ArticlesController extends Controller
      */
     public function show(Articles $article)
     {
-        return view('admin.articles.show', compact('article'));
+        $meta = [
+            'title'       => $article->meta_title ?? $article->title,
+            'description' => $article->meta_description ?? $article->excerpt,
+            'keywords'    => $article->meta_keywords,
+            'canonical'   => $article->canonical_url ?? url()->current(),
+            'og_image'    => $article->og_image_url ?? $article->featured_image_url,
+        ];
+        return view('admin.articles.show', compact('article', 'meta'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Articles $articles)
+    public function edit(Articles $article)
     {
-        //
+        $categories = \App\Models\Category::all();
+        $tags = \App\Models\Tag::all();
+        $article->load('tags');
+        return view('admin.articles.edit', compact('article', 'categories', 'tags'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateArticlesRequest $request, Articles $articles)
+    public function update(UpdateArticlesRequest $request, Articles $article)
     {
-        //
+        $data = $request->validated();
+        
+        if (empty($data['slug'])) {
+            $data['slug'] = \Illuminate\Support\Str::slug($data['title']);
+        }
+        
+        if ($request->hasFile('featured_image')) {
+            $path = $request->file('featured_image')->store('articles', 'public');
+            $data['featured_image'] = $path;
+        }
+
+        if ($data['status'] === 'published' && empty($data['published_at'])) {
+            $data['published_at'] = now();
+        }
+
+        $article_tags = $data['tags'] ?? [];
+        unset($data['tags']);
+
+        $article->update($data);
+        
+        $article->tags()->sync($article_tags);
+
+        return redirect()->route('articles.index')->with('success', 'Article updated successfully.');
     }
 
     /**

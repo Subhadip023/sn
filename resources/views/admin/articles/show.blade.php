@@ -1,4 +1,4 @@
-<x-font-layout title="{{ $article->title ?? 'Welcome' }}" :pages="$pages ?? []">
+<x-font-layout title="{{ $article->title ?? 'Welcome' }}" :pages="$pages ?? []" :meta="$meta ?? []">
       <div class="max-w-3xl mx-auto py-5">
             <header class="mb-8">
                 <span class="inline-block bg-primary-red text-white px-4 py-1.5 rounded text-sm mb-4">{{ $article->category->title }}</span>

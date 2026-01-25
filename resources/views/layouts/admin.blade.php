@@ -15,6 +15,8 @@
   <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 
   <style>
+
+
     @keyframes ticker {
       0% {
         transform: translateY(0);
@@ -125,6 +127,8 @@
         }
       }
     };
+
+
   </script>
 </head>
 

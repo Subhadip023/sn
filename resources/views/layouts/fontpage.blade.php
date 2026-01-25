@@ -1,12 +1,42 @@
+@props(['title' => null, 'pages' => [], 'meta' => []])
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{  'Sohoj News | '. $title ?? 'Sohoj News' }}</title>
-    <!-- <script src="https://cdn.tailwindcss.com"></script>
-      -->
+    <title>{{ $meta['title'] ?? ($title ?? 'Sohoj News') }}</title>
+
+    @if(isset($meta))
+        @if(isset($meta['description']))
+            <meta name="description" content="{{ $meta['description'] }}">
+        @endif
+        @if(isset($meta['keywords']))
+            <meta name="keywords" content="{{ $meta['keywords'] }}">
+        @endif
+        @if(isset($meta['canonical']))
+            <link rel="canonical" href="{{ $meta['canonical'] }}">
+        @endif
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ $meta['canonical'] ?? url()->current() }}">
+        <meta property="og:title" content="{{ $meta['title'] ?? ($title ?? 'Sohoj News') }}">
+        <meta property="og:description" content="{{ $meta['description'] ?? '' }}">
+        @if(isset($meta['og_image']))
+            <meta property="og:image" content="{{ $meta['og_image'] }}">
+        @endif
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="{{ $meta['canonical'] ?? url()->current() }}">
+        <meta property="twitter:title" content="{{ $meta['title'] ?? ($title ?? 'Sohoj News') }}">
+        <meta property="twitter:description" content="{{ $meta['description'] ?? '' }}">
+        @if(isset($meta['og_image']))
+            <meta property="twitter:image" content="{{ $meta['og_image'] }}">
+        @endif
+    @endif
+    
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -229,7 +259,9 @@
 
     <x-ui.loader />
 
-   <x-ui.news-later />
+               @guest
+               <x-ui.news-later />
+               @endguest    
 
     <!-- user assert for js not vite -->
     <script src="{{ asset('js/script.js') }}"></script>
