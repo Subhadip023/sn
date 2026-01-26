@@ -20,36 +20,49 @@
 
   
         
-        <form action="{{ route('pages.reorder') }}" method="POST">
+        <form action="{{ route('pages.reorder') }}" id="reorderForm" method="POST">
             @csrf
             <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead class="text-slate-500">
                     <tr class="text-left">
+                        <th class="py-2 font-medium w-10"></th>
                         <th class="py-2 font-medium">Position</th>
                         <th class="py-2 font-medium">Title</th>
                         <th class="py-2 font-medium">Slug</th>
                         <th class="py-2 font-medium">Status</th>
                         <th class="py-2 font-medium">Last Modified</th>
-                        <th class="py-2 font-medium">Action</th>
+                        <th class="py-2 font-medium text-right">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
+                <tbody id="sortable-pages" class="divide-y divide-slate-100">
                     @if($pages->isEmpty())
                     <tr>
-                        <td class="py-2 text-slate-900" colspan="5">No pages found</td>
+                        <td class="py-2 text-slate-900" colspan="7">No pages found</td>
                     </tr>
                     @else
                         @foreach ($pages as $page)
-                        <tr>
-                            <td class="py-2 text-slate-900"><input class="w-20 rounded border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none" type="number" name="position[{{ $page->id }}]" value="{{ $page->position }}"></td>
-                            <td class="py-2 text-slate-900">{{ $page->title }}</td>
+                        <tr class="sortable-row" data-id="{{ $page->id }}">
+                            <td class="py-2 text-slate-400 cursor-move handle">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </td>
+                            <td class="py-2 text-slate-900">
+                                <span class="position-text">{{ $page->position }}</span>
+                                <input type="hidden" name="position[{{ $page->id }}]" class="position-input" value="{{ $page->position }}">
+                            </td>
+                            <td class="py-2 text-slate-900 font-medium">{{ $page->title }}</td>
                             <td class="py-2 text-slate-600">{{ $page->slug }}</td>
-                            <td class="py-2"><span class="px-2 py-1 rounded-full {{ $page->active? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }} text-slate-700 text-xs font-medium">{{ $page->active? 'Published' : 'Draft' }}</span></td>
-                            <td class="py-2 text-slate-500">{{ $page->updated_at }}</td>
-                            <td class="py-2 space-x-2">
-                                <a class="text-brand-600 hover:text-brand-700" href="#">Edit</a>
-                                <button class="text-slate-500 hover:text-slate-700">Delete</button>
+                            <td class="py-2">
+                                <span class="px-2.5 py-0.5 rounded-full {{ $page->active? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }} text-xs font-semibold">
+                                    {{ $page->active? 'Published' : 'Draft' }}
+                                </span>
+                            </td>
+                            <td class="py-2 text-slate-500">{{ $page->updated_at->format('M d, Y') }}</td>
+                            <td class="py-2 text-right space-x-2">
+                                <a class="text-brand-600 hover:text-brand-700 font-medium" href="#">Edit</a>
+                                <button class="text-rose-500 hover:text-rose-700 font-medium">Delete</button>
                             </td>
                         </tr>
                         @endforeach
@@ -57,17 +70,41 @@
                 </tbody>
             </table>
         </div>
-        <div class="flex justify-end pt-4">
+        <div class="flex justify-end pt-4" id="saveOrderBtn" style="display: none;">
             <button type="submit" class="px-6 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold transition-all shadow-sm active:scale-95">
-                Save Positions
+                Save Order
             </button>
         </div>
     </form>
     </section>
 
-
-
+    <!-- SortableJS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
-       
+        document.addEventListener('DOMContentLoaded', function() {
+            const el = document.getElementById('sortable-pages');
+            const saveBtn = document.getElementById('saveOrderBtn');
+            
+            if (el) {
+                const sortable = Sortable.create(el, {
+                    handle: '.handle',
+                    animation: 150,
+                    ghostClass: 'bg-slate-50',
+                    onEnd: function() {
+                        updatePositions();
+                        saveBtn.style.display = 'flex';
+                    }
+                });
+            }
+
+            function updatePositions() {
+                const rows = document.querySelectorAll('.sortable-row');
+                rows.forEach((row, index) => {
+                    const position = index + 1;
+                    row.querySelector('.position-text').textContent = position;
+                    row.querySelector('.position-input').value = position;
+                });
+            }
+        });
     </script>
 </x-admin-layout>
