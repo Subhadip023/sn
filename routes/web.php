@@ -5,13 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Page;
 Route::get('/', function () {
     
-    $pages = Page::where('active', true)->get()->toArray();
+    $pages = Page::where('active', true)->orderBy('position', 'asc')->get()->toArray();
     return view('welcome')->with('pages', $pages);
 });
 
 Route::get('/page/{slug}', function ($slug) {
     $page = Page::where('slug', $slug)->first();
-    $pages = Page::where('active', true)->get()->toArray();
+    $pages = Page::where('active', true)->orderBy('position', 'asc')->get()->toArray();
     return view('page')->with('page', $page)->with('pages', $pages);
 });
 

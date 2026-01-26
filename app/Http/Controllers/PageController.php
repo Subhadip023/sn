@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePageRequest;
 use App\Http\Requests\UpdatePageRequest;
 use App\Models\Page;
+use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
@@ -13,7 +14,7 @@ class PageController extends Controller
      */
     public function index()
     {
-        $pages = Page::all();
+        $pages = Page::orderBy('position', 'asc')->get();
         $length = $pages->count();
 
         return view('admin.pages.index', compact('pages', 'length'));
@@ -37,6 +38,8 @@ class PageController extends Controller
             if (!isset($valData['slug'])) {
                 $valData['slug'] = str($valData['title'])->slug();
             }
+            $lastPosition = Page::max('position');
+            $valData['position'] = $lastPosition + 1;
             Page::create($valData);
             return redirect()->route('pages.index')->with('success', 'Page created successfully');
         } catch (\Throwable $th) {
@@ -74,5 +77,26 @@ class PageController extends Controller
     public function destroy(Page $page)
     {
         //
+    }
+
+    /**
+     * Reorder pages position.
+     */
+    public function reorder(Request $request)
+    {
+        $positions = $request->input('position');
+    
+        if (is_array($positions)) {
+            // Check for duplicate values in the positions array
+            if (count($positions) !== count(array_unique($positions))) {
+                return back()->with('error', 'Duplicate position values are not allowed.');
+            }
+
+            foreach ($positions as $id => $position) {
+                Page::where('id', $id)->update(['position' => $position]);
+            }
+        }
+
+        return redirect()->route('pages.index')->with('success', 'Page order updated successfully');
     }
 }
