@@ -1,6 +1,6 @@
 <x-admin-layout>
 
-        <header class="flex flex-wrap items-center gap-4 justify-between">
+        <header class="flex flex-wrap items-center gap-4 justify-between ">
           <div>
             <p class="text-sm text-slate-500">Overview</p>
             <h1 class="text-2xl font-semibold text-slate-900">Publishing health</h1>
@@ -14,23 +14,23 @@
         <section class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <p class="text-sm text-slate-500">Published</p>
-            <div class="text-3xl font-semibold text-slate-900">482</div>
+            <div class="text-3xl font-semibold text-slate-900">{{ $stats['published'] }}</div>
             <p class="text-xs text-emerald-600 mt-1">+12 this week</p>
           </div>
           <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <p class="text-sm text-slate-500">Drafts</p>
-            <div class="text-3xl font-semibold text-slate-900">34</div>
+            <div class="text-3xl font-semibold text-slate-900">{{ $stats['drafts'] }}</div>
             <p class="text-xs text-amber-600 mt-1">Needs review</p>
           </div>
           <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
             <p class="text-sm text-slate-500">Scheduled</p>
-            <div class="text-3xl font-semibold text-slate-900">18</div>
+            <div class="text-3xl font-semibold text-slate-900">{{ $stats['scheduled'] }}</div>
             <p class="text-xs text-slate-500 mt-1">Next 24h</p>
           </div>
           <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-            <p class="text-sm text-slate-500">Editors online</p>
-            <div class="text-3xl font-semibold text-slate-900" id="editorsCount">7</div>
-            <p class="text-xs text-emerald-600 mt-1">Live</p>
+            <p class="text-sm text-slate-500">Editors</p>
+            <div class="text-3xl font-semibold text-slate-900" id="editorsCount">{{ $stats['editors'] }}</div>
+            <p class="text-xs text-emerald-600 mt-1">Total</p>
           </div>
         </section>
 
@@ -54,9 +54,12 @@
               <span class="text-xs text-slate-500">Live</span>
             </div>
             <div id="activity" class="space-y-3 text-sm text-slate-700">
-              <div class="flex items-center justify-between bg-slate-50 px-3 py-2 rounded-lg"><span>Published: Battery leap doubles EV range</span><span class="text-slate-400">10:04</span></div>
-              <div class="flex items-center justify-between bg-slate-50 px-3 py-2 rounded-lg"><span>Scheduled: Climate Q&A</span><span class="text-slate-400">09:58</span></div>
-              <div class="flex items-center justify-between bg-slate-50 px-3 py-2 rounded-lg"><span>Draft updated: AI safety explainer</span><span class="text-slate-400">09:42</span></div>
+              @foreach($recentActivity as $article)
+              <div class="flex items-center justify-between bg-slate-50 px-3 py-2 rounded-lg">
+                <span>{{ ucfirst($article->status) }}: {{ $article->title }}</span>
+                <span class="text-slate-400">{{ $article->updated_at->format('H:i') }}</span>
+              </div>
+              @endforeach
             </div>
           </div>
         </section>
@@ -78,36 +81,20 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100" id="queueTable">
+                @foreach($contentQueue as $article)
                 <tr>
-                  <td class="py-2 text-slate-900">AI safety pact disclosure rules</td>
-                  <td class="py-2 text-slate-600">Tech</td>
-                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-medium">Published</span></td>
-                  <td class="py-2 text-slate-500">10:04</td>
+                  <td class="py-2 text-slate-900">{{ $article->title }}</td>
+                  <td class="py-2 text-slate-600">{{ $article->category->name ?? 'N/A' }}</td>
+                  <td class="py-2">
+                    <span class="px-2 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">{{ ucfirst($article->status) }}</span>
+                  </td>
+                  <td class="py-2 text-slate-500">{{ $article->updated_at->format('H:i') }}</td>
                   <td class="py-2 space-x-2">
-                    <a class="text-brand-600 hover:text-brand-700" href="./article.html">View</a>
-                    <a class="text-slate-500 hover:text-slate-700" href="/admin/content">Edit</a>
+                    <a class="text-brand-600 hover:text-brand-700" href="{{ route('articles.show', $article) }}">View</a>
+                    <a class="text-slate-500 hover:text-slate-700" href="{{ route('articles.edit', $article) }}">Edit</a>
                   </td>
                 </tr>
-                <tr>
-                  <td class="py-2 text-slate-900">Streaming bundles return</td>
-                  <td class="py-2 text-slate-600">Culture</td>
-                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">Draft</span></td>
-                  <td class="py-2 text-slate-500">09:40</td>
-                  <td class="py-2 space-x-2">
-                    <a class="text-brand-600 hover:text-brand-700" href="./article.html">View</a>
-                    <a class="text-slate-500 hover:text-slate-700" href="/admin/content">Edit</a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="py-2 text-slate-900">Microgrids accelerate recovery</td>
-                  <td class="py-2 text-slate-600">Climate</td>
-                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-medium">Review</span></td>
-                  <td class="py-2 text-slate-500">09:12</td>
-                  <td class="py-2 space-x-2">
-                    <a class="text-brand-600 hover:text-brand-700" href="./article.html">View</a>
-                    <a class="text-slate-500 hover:text-slate-700" href="/admin/content">Edit</a>
-                  </td>
-                </tr>
+                @endforeach
               </tbody>
             </table>
           </div>

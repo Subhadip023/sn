@@ -165,15 +165,35 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function () {
-                if (loader) {
-                    loader.style.display = 'block';
-                }
-            });
+        form.addEventListener('submit', function () {
+            if (loader) {
+                // loader.style.display = 'block'; // Optional: keep it hidden if not needed
+            }
+        });
+    });
+
+
+    
+       // Profile Dropdown Logic
+    const profileBtn = document.getElementById('profile-btn');
+    const profileMenu = document.getElementById('profile-menu');
+    const profileWrapper = document.getElementById('profile-wrapper');
+
+    if (profileBtn && profileMenu) {
+        profileBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle('hidden');
         });
 
+        document.addEventListener('click', (e) => {
+            if (profileWrapper && !profileWrapper.contains(e.target)) {
+                profileMenu.classList.add('hidden');
+            }
+        });
+    }
+
     // Initialize the subscription popup
-    setupSubscriptionPopup();
+    // setupSubscriptionPopup();
 
     // Add animation to news cards on scroll
     const observerOptions = {
@@ -265,3 +285,11 @@ if (document.readyState === 'loading') {
 } else {
     setActiveNavItem();
 }
+
+const sidebar_btn = document.getElementById('sidebar-toggle');
+const sidebar = document.getElementById('sidebar');
+sidebar_btn.addEventListener('click', () => {
+   sidebar.classList.toggle('hidden');
+});
+
+

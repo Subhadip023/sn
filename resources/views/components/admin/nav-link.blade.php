@@ -6,10 +6,10 @@
 <a href="{{ $href }}"
    {{ $attributes->merge([
         'class' =>
-            'block px-3 py-2 rounded-lg ' .
+            'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group ' .
             ($active
-                ? 'bg-slate-100 text-brand-600'
-                : 'hover:bg-slate-50 text-slate-600')
+                ? 'bg-brand-500 text-white font-bold shadow-lg shadow-brand-500/20'
+                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800')
    ]) }}>
     {{ $slot }}
 </a>
