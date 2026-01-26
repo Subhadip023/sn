@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTagRequest;
+use App\Http\Requests\UpdateTagRequest;
 use App\Models\Tag;
 
 class TagController extends Controller
@@ -53,15 +54,23 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        //
+        return view('admin.tags.edit', compact('tag'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tag $tag)
+    public function update(UpdateTagRequest $request, Tag $tag)
     {
-        //
+        $validated = $request->validated();
+        
+        if (empty($validated['slug'])) {
+            unset($validated['slug']);
+        }
+
+        $tag->update($validated);
+
+        return redirect()->route('tags.index')->with('success', 'Tag updated successfully.');
     }
 
     /**

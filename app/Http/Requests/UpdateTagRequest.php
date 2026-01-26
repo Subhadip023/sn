@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateCategoryRequest extends FormRequest
+class UpdateTagRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,9 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
-            'title' => 'nullable | string | max:255',
-            'slug' => 'nullable | string | max:255 | unique:categories,slug,' . $this->route('category')->id,
-            'active' => 'nullable | boolean',
+            'title' => 'nullable|string|max:255',
+            'slug' => 'nullable|string|max:255|unique:tags,slug,' . $this->route('tag')->id,
+            'active' => 'nullable|boolean',
         ];
     }
 }

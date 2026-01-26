@@ -11,4 +11,10 @@ class Page extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function blocks(){
+        
+        return $this->hasMany(PageBlock::class)->orderBy('position');
+    }
+
 }

@@ -1,4 +1,4 @@
-<x-admin-layout title="Manage Categories"> 
+<x-admin-layout title="Manage Categories">
     <header class="flex flex-wrap items-center gap-4 justify-between mb-6">
         <div>
             <p class="text-sm text-slate-500">Site</p>
@@ -17,7 +17,7 @@
                     <label for="title" class="block text-sm font-medium text-slate-700">Title <span class="text-rose-500">*</span></label>
                     <input type="text" name="title" id="title" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none" placeholder="e.g. Technology" required>
                     @error('title')
-                        <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -26,7 +26,7 @@
                     <input type="text" name="slug" id="slug" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none" placeholder="auto-generated">
                     <p class="text-xs text-slate-500">Leave empty to auto-generate from title.</p>
                     @error('slug')
-                        <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
+                    <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -66,11 +66,19 @@
                             <td class="py-2 text-slate-900">{{ $category->title }}</td>
                             <td class="py-2 text-slate-600">{{ $category->slug }}</td>
                             <td class="py-2">
-                                <span class="px-2 py-1 rounded-full {{ $category->active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }} text-xs font-medium">
-                                    {{ $category->active ? 'Active' : 'Inactive' }}
-                                </span>
+                                <form action="{{route('categories.update', $category)}}" method="post">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="active" value="{{ $category->active ? 0 : 1 }}">
+                                    <button type="submit" onclick="this.disabled=true; if(confirm('Are you sure you want to update this category status ?')){this.form.submit()};this.disabled=false;return false;"
+                                        class="px-2 py-1 rounded-full {{ $category->active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }} text-xs font-medium">
+                                        {{ $category->active ? 'Active' : 'Inactive' }}
+                                    </button>
+                                </form>
+
                             </td>
                             <td class="py-2">
+                                <a href="{{ route('categories.edit', $category) }}" class="text-slate-500 hover:text-slate-700 font-medium">Edit</a>
                                 <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this category?');">
                                     @csrf
                                     @method('DELETE')
@@ -88,4 +96,5 @@
             </div>
         </section>
     </div>
+
 </x-admin-layout>

@@ -67,11 +67,18 @@
                             <td class="py-2 text-slate-900">{{ $tag->title }}</td>
                             <td class="py-2 text-slate-600">{{ $tag->slug }}</td>
                             <td class="py-2">
-                                <span class="px-2 py-1 rounded-full {{ $tag->active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }} text-xs font-medium">
-                                    {{ $tag->active ? 'Active' : 'Inactive' }}
-                                </span>
+                                <form action="{{route('tags.update', $tag)}}" method="post">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="active" value="{{ $tag->active ? 0 : 1 }}">
+                                    <button type="submit" onclick="this.disabled=true; if(confirm('Are you sure you want to update this tag status ?')){this.form.submit()};this.disabled=false;return false;"
+                                        class="px-2 py-1 rounded-full {{ $tag->active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }} text-xs font-medium">
+                                        {{ $tag->active ? 'Active' : 'Inactive' }}
+                                    </button>
+                                </form>
                             </td>
                             <td class="py-2">
+                                <a href="{{ route('tags.edit', $tag) }}" class="text-slate-500 hover:text-slate-700 font-medium">Edit</a>
                                 <form action="{{ route('tags.destroy', $tag) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this tag?');">
                                     @csrf
                                     @method('DELETE')

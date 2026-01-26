@@ -164,6 +164,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3000); // 3 seconds max loading time
     }
 
+    document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function () {
+                if (loader) {
+                    loader.style.display = 'block';
+                }
+            });
+        });
+
     // Initialize the subscription popup
     setupSubscriptionPopup();
 
