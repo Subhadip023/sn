@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-admin-layout title="Edit Article">
     <header class="mb-6">
         <h1 class="text-2xl font-semibold text-slate-900">Edit Article</h1>
     </header>

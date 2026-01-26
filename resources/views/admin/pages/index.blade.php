@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-admin-layout title="Manage Pages">
     <header class="flex flex-wrap items-center gap-4 justify-between">
         <div>
             <p class="text-sm text-slate-500">Site</p>

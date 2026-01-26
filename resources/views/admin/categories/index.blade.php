@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-admin-layout title="Manage Categories"> 
     <header class="flex flex-wrap items-center gap-4 justify-between mb-6">
         <div>
             <p class="text-sm text-slate-500">Site</p>
