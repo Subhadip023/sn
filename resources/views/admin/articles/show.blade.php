@@ -8,7 +8,29 @@
                     <span class="flex items-center"><i class="far fa-calendar-alt mr-1.5"></i> {{ $article->published_at }}</span>
                     <span class="flex items-center"><i class="far fa-clock mr-1.5"></i> 5 min read</span>
                     <span class="flex items-center"><i class="far fa-comment mr-1.5"></i> 24 Comments</span>
-                    <span class="flex items-center"><i class="fas fa-share-alt mr-1.5"></i> Share</span>
+                    <div class="relative inline-block text-left" id="shareContainer">
+                        <button type="button" onclick="toggleShareMenu()" class="flex items-center hover:text-primary-red transition-colors">
+                            <i class="fas fa-share-alt mr-1.5"></i> Share
+                        </button>
+                        
+                        <!-- Share Dropdown Menu -->
+                        <div id="shareMenu" class="hidden absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                            <div class="py-1" role="menu" aria-orientation="vertical">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                    <i class="fab fa-facebook-f mr-3 text-blue-600"></i> Facebook
+                                </a>
+                                <a href="https://twitter.com/intent/tweet?url={{ urlencode(url()->current()) }}&text={{ urlencode($article->title) }}" target="_blank" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                    <i class="fab fa-twitter mr-3 text-blue-400"></i> Twitter
+                                </a>
+                                <a href="https://wa.me/?text={{ urlencode($article->title . ' ' . url()->current()) }}" target="_blank" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">
+                                    <i class="fab fa-whatsapp mr-3 text-green-500"></i> WhatsApp
+                                </a>
+                                <button onclick="copyToClipboard()" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left" role="menuitem">
+                                    <i class="fas fa-link mr-3 text-gray-500"></i> <span id="copyText">Copy Link</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </header>
             
@@ -85,4 +107,86 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            window.toggleShareMenu = function() {
+                const menu = document.getElementById('shareMenu');
+                if (!menu) return;
+                
+                menu.classList.toggle('hidden');
+                
+                // If Web Share API is available, try it first for a better mobile experience
+                if (navigator.share && !menu.classList.contains('hidden')) {
+                    navigator.share({
+                        title: {!! json_encode($article->title) !!},
+                        text: {!! json_encode($article->excerpt) !!},
+                        url: window.location.href,
+                    }).then(() => {
+                        menu.classList.add('hidden');
+                    }).catch((error) => {
+                        console.log('Error sharing:', error);
+                    });
+                }
+            };
+
+            window.copyToClipboard = function() {
+                const url = window.location.href;
+                
+                const handleCopySuccess = () => {
+                    const copyText = document.getElementById('copyText');
+                    if (!copyText) return;
+                    
+                    const originalText = copyText.innerText;
+                    copyText.innerText = 'Copied!';
+                    copyText.classList.add('text-green-600');
+                    
+                    setTimeout(() => {
+                        copyText.innerText = originalText;
+                        copyText.classList.remove('text-green-600');
+                        const menu = document.getElementById('shareMenu');
+                        if (menu) menu.classList.add('hidden');
+                    }, 2000);
+                };
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(handleCopySuccess).catch(err => {
+                        console.error('Failed to copy: ', err);
+                        fallbackCopyTextToClipboard(url, handleCopySuccess);
+                    });
+                } else {
+                    fallbackCopyTextToClipboard(url, handleCopySuccess);
+                }
+            };
+
+            function fallbackCopyTextToClipboard(text, callback) {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                
+                // Ensure it's not visible
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                textArea.style.top = "0";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful && callback) callback();
+                } catch (err) {
+                    console.error('Fallback copy failed', err);
+                }
+
+                document.body.removeChild(textArea);
+            }
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const container = document.getElementById('shareContainer');
+                const menu = document.getElementById('shareMenu');
+                if (container && menu && !container.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        </script>
 </x-font-layout>

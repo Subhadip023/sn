@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-semibold text-slate-900">Edit Article</h1>
     </header>
 
-    <form action="{{ route('articles.update', $article->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('articles.update', $article) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
