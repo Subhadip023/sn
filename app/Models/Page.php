@@ -11,4 +11,12 @@ class Page extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function categories() {
+        return $this->belongsToMany(Category::class, 'page_categories', 'page_id', 'category_id');
+    }
+
+    public function tags() {
+        return $this->belongsToMany(Tag::class, 'page_tags', 'page_id', 'tag_id');
+    }
 }

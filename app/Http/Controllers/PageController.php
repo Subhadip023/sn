@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePageRequest;
 use App\Http\Requests\UpdatePageRequest;
+use App\Models\Category;
+use App\Models\Tag;
 use App\Models\Page;
 use Illuminate\Http\Request;
 
@@ -98,5 +100,28 @@ class PageController extends Controller
         }
 
         return redirect()->route('pages.index')->with('success', 'Page order updated successfully');
+    }
+
+    public function settings(Page $page) {
+        $categories = Category::where('active', true)->get();
+        $tags= Tag::where('active', true)->get();
+        $selcted_categories = $page->categories->pluck('id')->toArray();
+        $selcted_tasgs = $page->tags->pluck('id')->toArray();
+        return view('admin.pages.settings', compact('page', 'categories', 'tags', 'selcted_categories', 'selcted_tasgs'));
+    }
+
+    public function updateSettings(Request $request) {
+        try {
+            $data=$request->except('_token');
+            $categoryIds = $request->categories;
+            $tagIds = $request->tags;
+            $page = Page::find($data['page_id']);
+            $page->categories()->sync($categoryIds);
+            $page->tags()->sync($tagIds);
+            return redirect()->route('page.settings', $page->id)->with('success', 'Page settings updated successfully')->with('success', 'Page settings updated successfully');
+
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
     }
 }

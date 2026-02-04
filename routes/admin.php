@@ -12,4 +12,6 @@ Route::prefix('admin')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
     Route::resource('articles', ArticlesController::class);
+    Route::get('page/settings/{page}', [PageController::class, 'settings'])->name('page.settings');
+    Route::post('page/settings', [PageController::class, 'updateSettings'])->name('page.settings.update');
 });

@@ -12,21 +12,20 @@
                 <!-- Main Featured Article -->
                 <article class="mb-8 border border-gray-200 rounded-lg overflow-hidden">
                     <div class="relative">
-                        <img src="https://picsum.photos/1200/600?random=101" alt="Featured News" class="w-full h-64 md:h-80 object-cover">
+                        <img src="{{ $top_story->featured_image_url }}" alt="Featured News" class="w-full h-64 md:h-80 object-cover">
                         <span class="absolute bottom-2.5 left-2.5 bg-primary-red text-white px-3 py-1 rounded text-xs font-semibold uppercase">Top Story</span>
                     </div>
                     <div class="p-6">
-                        <h2 class="text-2xl font-semibold mb-3">Breaking: Major Development in Today's Headline Story</h2>
+                        <h2 class="text-2xl font-semibold mb-3">{{$top_story->title}}</h2>
                         <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-                            <span class="flex items-center"><i class="far fa-user mr-1.5"></i> By John Doe</span>
-                            <span class="flex items-center"><i class="far fa-clock mr-1.5"></i> 2 hours ago</span>
+                            <span class="flex items-center"><i class="far fa-user mr-1.5"></i> {{$top_story->author->name}}</span>
+                            <span class="flex items-center"><i class="far fa-clock mr-1.5"></i> {{$top_story->created_at->diffForHumans()}}</span>
                             <span class="flex items-center"><i class="far fa-comment mr-1.5"></i> 24 Comments</span>
                         </div>
                         <p class="text-gray-700 mb-4">
-                            In a significant turn of events, the latest developments have shaken the political landscape. 
-                            Experts weigh in on what this means for the future of the region and its impact on global markets.
+                            {{$top_story->excerpt}}
                         </p>
-                        <a href="./article.html" class="inline-flex items-center text-primary-red font-medium hover:underline">Read Full Story <i class="fas fa-arrow-right ml-2"></i></a>
+                        <a href="{{route('articles.show', $top_story->slug)}}" class="inline-flex items-center text-primary-red font-medium hover:underline">Read Full Story <i class="fas fa-arrow-right ml-2"></i></a>
                     </div>
                 </article>
 
@@ -152,7 +151,7 @@
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold mb-5 pb-2.5 border-b-2 border-gray-200">Popular Posts</h3>
                     <div class="space-y-4">
-                        <div class="flex gap-3">
+                        <!-- <div class="flex gap-3">
                             <div class="flex-shrink-0">
                                 <img src="https://picsum.photos/80/60?random=301" alt="Popular Post 1" class="w-20 h-15 object-cover rounded">
                             </div>
@@ -160,25 +159,20 @@
                                 <h4 class="text-sm font-medium mb-1 hover:text-primary-red"><a href="#">Top 10 Travel Destinations for 2024</a></h4>
                                 <span class="text-xs text-gray-600">Jan 15, 2024</span>
                             </div>
-                        </div>
+                        </div> -->
+                        @isset($most_populer_posts)
+                        @foreach($most_populer_posts as $post)
                         <div class="flex gap-3">
                             <div class="flex-shrink-0">
-                                <img src="https://picsum.photos/80/60?random=302" alt="Popular Post 2" class="w-20 h-15 object-cover rounded">
+                                <img src="{{$post->featured_image_url}}" alt="Popular Post 1" class="w-20 h-15 object-cover rounded">
                             </div>
                             <div class="flex-1">
-                                <h4 class="text-sm font-medium mb-1 hover:text-primary-red"><a href="#">New Study Reveals Benefits of Mediterranean Diet</a></h4>
-                                <span class="text-xs text-gray-600">Jan 14, 2024</span>
+                                <h4 class="text-sm font-medium mb-1 hover:text-primary-red"><a href="{{route('articles.show', $post->slug)}}">{{$post->title}}</a></h4>
+                                <span class="text-xs text-gray-600">{{$post->created_at->diffForHumans()}}</span>
                             </div>
                         </div>
-                        <div class="flex gap-3">
-                            <div class="flex-shrink-0">
-                                <img src="https://picsum.photos/80/60?random=303" alt="Popular Post 3" class="w-20 h-15 object-cover rounded">
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="text-sm font-medium mb-1 hover:text-primary-red"><a href="#">Tech Giant Unveils Revolutionary New Product</a></h4>
-                                <span class="text-xs text-gray-600">Jan 13, 2024</span>
-                            </div>
-                        </div>
+                        @endforeach
+                        @endisset
                     </div>
                 </div>
 
@@ -186,13 +180,11 @@
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold mb-5 pb-2.5 border-b-2 border-gray-200">Categories</h3>
                     <ul class="space-y-2">
-                        <li class="flex justify-between items-center py-2 border-b border-gray-100"><a href="#" class="hover:text-primary-red transition-colors">Politics</a> <span class="text-sm text-gray-600">24</span></li>
-                        <li class="flex justify-between items-center py-2 border-b border-gray-100"><a href="#" class="hover:text-primary-red transition-colors">Business</a> <span class="text-sm text-gray-600">18</span></li>
-                        <li class="flex justify-between items-center py-2 border-b border-gray-100"><a href="#" class="hover:text-primary-red transition-colors">Technology</a> <span class="text-sm text-gray-600">32</span></li>
-                        <li class="flex justify-between items-center py-2 border-b border-gray-100"><a href="#" class="hover:text-primary-red transition-colors">Sports</a> <span class="text-sm text-gray-600">15</span></li>
-                        <li class="flex justify-between items-center py-2 border-b border-gray-100"><a href="#" class="hover:text-primary-red transition-colors">Entertainment</a> <span class="text-sm text-gray-600">27</span></li>
-                        <li class="flex justify-between items-center py-2 border-b border-gray-100"><a href="#" class="hover:text-primary-red transition-colors">Health</a> <span class="text-sm text-gray-600">12</span></li>
-                        <li class="flex justify-between items-center py-2"><a href="#" class="hover:text-primary-red transition-colors">Science</a> <span class="text-sm text-gray-600">9</span></li>
+                        @isset($page->categories)
+                        @foreach($page->categories as $category)
+                        <li class="flex justify-between items-center py-2 border-b border-gray-100"><a href="#" class="hover:text-primary-red transition-colors">{{ $category->title }}</a> <span class="text-sm text-gray-600">{{ $category->articles->count() ?? 0 }}</span></li>
+                        @endforeach
+                        @endisset
                     </ul>
                 </div>
 
@@ -200,14 +192,11 @@
                 <div class="mb-8">
                     <h3 class="text-xl font-semibold mb-5 pb-2.5 border-b-2 border-gray-200">Tags</h3>
                     <div class="flex flex-wrap gap-2">
-                        <a href="#" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-primary-red hover:text-white transition-colors">#Breaking</a>
-                        <a href="#" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-primary-red hover:text-white transition-colors">#Latest</a>
-                        <a href="#" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-primary-red hover:text-white transition-colors">#Exclusive</a>
-                        <a href="#" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-primary-red hover:text-white transition-colors">#Trending</a>
-                        <a href="#" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-primary-red hover:text-white transition-colors">#Interview</a>
-                        <a href="#" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-primary-red hover:text-white transition-colors">#Analysis</a>
-                        <a href="#" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-primary-red hover:text-white transition-colors">#Opinion</a>
-                        <a href="#" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-primary-red hover:text-white transition-colors">#Report</a>
+                        @isset($page->tags)
+                        @foreach($page->tags as $tag)
+                        <a href="#" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-primary-red hover:text-white transition-colors">{{ $tag->title }}</a>
+                        @endforeach
+                        @endisset
                     </div>
                 </div>
             </aside>

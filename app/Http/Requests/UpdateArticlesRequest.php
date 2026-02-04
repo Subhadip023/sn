@@ -30,6 +30,7 @@ class UpdateArticlesRequest extends FormRequest
             'author_id' => 'nullable|exists:users,id',
             'status' => 'required|in:draft,published',
             'featured_image' => 'nullable|image|max:2048',
+            'featured_image_url' => 'nullable|string',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
             'meta_title' => 'nullable|string|max:255',

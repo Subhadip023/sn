@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Page;
+use App\Models\Articles;
 Route::get('/', function () {
     
     $pages = Page::where('active', true)->orderBy('position', 'asc')->get()->toArray();
@@ -10,9 +11,33 @@ Route::get('/', function () {
 });
 
 Route::get('/page/{slug}', function ($slug) {
-    $page = Page::where('slug', $slug)->first();
+    $page = Page::with('categories.articles', 'tags')-> where('slug', $slug)->first();
     $pages = Page::where('active', true)->orderBy('position', 'asc')->get()->toArray();
-    return view('page')->with('page', $page)->with('pages', $pages);
+    $categoryIds = $page->categories->pluck('id');
+    $tagIds      = $page->tags->pluck('id');
+    $articles = Articles::where('status', 'published')->where(function ($q) use ($categoryIds, $tagIds) {
+
+            // from categories
+            if ($categoryIds->isNotEmpty()) {
+                $q->whereIn('category_id', $categoryIds);
+            }
+
+            // OR from tags
+            if ($tagIds->isNotEmpty()) {
+                $q->orWhereHas('tags', function ($t) use ($tagIds) {
+                    $t->whereIn('tags.id', $tagIds);
+                });
+            }
+
+        })
+        ->with(['category', 'tags', 'author'])
+        ->distinct()
+        ->latest()
+        ->get();
+
+$top_story = $articles->sortByDesc('created_at')->first();
+$most_populer_posts = $articles->sortByDesc('views')->take(3);
+return view('page')->with('page', $page)->with('pages', $pages)->with('articles', $articles)->with('top_story', $top_story)->with('most_populer_posts', $most_populer_posts);
 });
 
 Route::get('/dashboard', function () {

@@ -61,7 +61,9 @@
                             </td>
                             <td class="py-2 text-slate-500">{{ $page->updated_at->format('M d, Y') }}</td>
                             <td class="py-2 text-right space-x-2">
+
                                 <a class="text-brand-600 hover:text-brand-700 font-medium" href="#">Edit</a>
+                                <a class="text-brand-600 hover:text-brand-700 font-medium" href="{{ route('page.settings', $page->id) }}">Settings</a>
                                 <button class="text-rose-500 hover:text-rose-700 font-medium">Delete</button>
                             </td>
                         </tr>

@@ -107,7 +107,6 @@ class ArticlesController extends Controller
     public function update(UpdateArticlesRequest $request, Articles $article)
     {
         $data = $request->validated();
-        
         if (empty($data['slug'])) {
             $data['slug'] = \Illuminate\Support\Str::slug($data['title']);
         }
