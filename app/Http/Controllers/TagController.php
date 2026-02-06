@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTagRequest;
 use App\Models\Tag;
+use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
@@ -72,4 +73,15 @@ class TagController extends Controller
         $tag->delete();
         return redirect()->route('tags.index')->with('success', 'Tag deleted successfully.');
     }
+
+
+    public function search(Request $request) {
+        $search = $request['query'];
+        $tags = Tag::select('id', 'title')
+            ->where('title', 'like', "%{$search}%")
+            ->limit(10)
+            ->get();
+        return response()->json(['success' => true, 'data' => $tags]);
+    }
+
 }

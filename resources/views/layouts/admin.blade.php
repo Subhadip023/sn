@@ -13,6 +13,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
   <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
 
   <style>
 
@@ -112,6 +113,14 @@
     input[type="checkbox"]:checked~.checkbox-checkmark:after {
       display: block;
     }
+
+    .select2-container--default .select2-selection--multiple {
+    border-radius: 0.5rem;
+    border-color: #cbd5e1; /* slate-300 */
+    padding: 0.25rem;
+    min-height: 42px;
+}
+
   </style>
   <script>
     tailwind.config = {

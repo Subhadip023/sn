@@ -106,12 +106,13 @@ class PageController extends Controller
         $categories = Category::where('active', true)->get();
         $tags= Tag::where('active', true)->get();
         $selcted_categories = $page->categories->pluck('id')->toArray();
-        $selcted_tasgs = $page->tags->pluck('id')->toArray();
-        return view('admin.pages.settings', compact('page', 'categories', 'tags', 'selcted_categories', 'selcted_tasgs'));
+        $selcted_tags = $page->tags->pluck('id')->toArray();
+        return view('admin.pages.settings', compact('page', 'categories', 'tags', 'selcted_categories', 'selcted_tags'));
     }
 
     public function updateSettings(Request $request) {
         try {
+            dd($request->all());
             $data=$request->except('_token');
             $categoryIds = $request->categories;
             $tagIds = $request->tags;

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -72,5 +73,14 @@ class CategoryController extends Controller
     {
         $category->delete();
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+    }
+
+    public function search(Request $request) {
+        $search = $request['query'];
+        $categories = Category::select('id', 'title')
+            ->where('title', 'like', "%{$search}%")
+            ->limit(10)
+            ->get();
+        return response()->json(['success' => true, 'data' => $categories]);
     }
 }
