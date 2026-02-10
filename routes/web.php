@@ -15,7 +15,7 @@ Route::get('/page/{slug}', function ($slug) {
     $pages = Page::where('active', true)->orderBy('position', 'asc')->get()->toArray();
     $categoryIds = $page->categories->pluck('id');
     $tagIds      = $page->tags->pluck('id');
-    $articles = Articles::where('status', 'published')->where(function ($q) use ($categoryIds, $tagIds) {
+    $articles_query = Articles::where('status', 'published')->where(function ($q) use ($categoryIds, $tagIds) {
 
             // from categories
             if ($categoryIds->isNotEmpty()) {
@@ -32,11 +32,14 @@ Route::get('/page/{slug}', function ($slug) {
         })
         ->with(['category', 'tags', 'author'])
         ->distinct()
-        ->latest()
-        ->get();
+        ->latest();
 
-$top_story = $articles->sortByDesc('created_at')->first();
-$most_populer_posts = $articles->sortByDesc('views')->take(3);
+    $top_story = (clone $articles_query)->first(); 
+    $articles = $articles_query->when($top_story, function($q) use($top_story){
+        return $q->where('id', '!=', $top_story->id);
+    })->paginate(6);
+
+$most_populer_posts = Articles::where('status', 'published')->orderBy('views', 'desc')->take(3)->get();
 return view('page')->with('page', $page)->with('pages', $pages)->with('articles', $articles)->with('top_story', $top_story)->with('most_populer_posts', $most_populer_posts);
 });
 

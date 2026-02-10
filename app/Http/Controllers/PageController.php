@@ -112,7 +112,7 @@ class PageController extends Controller
 
     public function updateSettings(Request $request) {
         try {
-            dd($request->all());
+            // dd($request->all());
             $data=$request->except('_token');
             $categoryIds = $request->categories;
             $tagIds = $request->tags;
