@@ -105,27 +105,76 @@
                 <section class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-4">
                     <h3 class="text-lg font-medium text-slate-900">Classification</h3>
 
+                    <!-- Category Selection -->
                     <div class="space-y-1">
                         <label for="category_id" class="block text-sm font-medium text-slate-700">Category <span class="text-rose-500">*</span></label>
-                        <select name="category_id" id="category_id" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none" required>
-                            <option value="">Select Category</option>
-                            @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ old('category_id', $article->category_id) == $category->id ? 'selected' : '' }}>{{ $category->title }}</option>
-                            @endforeach
-                        </select>
+                        
+                        <!-- Selected Category Display -->
+                        <div id="selected_category_display" class="mb-2 min-h-[42px] p-2 rounded-lg border border-slate-200 bg-slate-50 flex flex-wrap gap-2">
+                            @php 
+                                $currentCatId = old('category_id', $article->category_id);
+                                $currentCat = $categories->find($currentCatId);
+                            @endphp
+                            @if($currentCat)
+                                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-100 text-brand-700 text-sm font-medium">
+                                    {{ $currentCat->title }}
+                                    <button type="button" class="remove-category-btn hover:bg-brand-200 rounded-full p-0.5 transition-colors">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                    </button>
+                                </span>
+                            @else
+                                <span class="text-xs text-slate-400 italic empty-message">No category selected</span>
+                            @endif
+                        </div>
+
+                        <!-- Category Search -->
+                        <div class="relative mb-2">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            <input type="search" id="category_search_input" placeholder="Search categories..." class="w-full rounded-lg border border-slate-300 bg-white pl-10 pr-4 py-2 text-sm text-slate-900 focus:border-brand-500 focus:outline-none transition-all">
+                        </div>
+
+                        <!-- Category Results -->
+                        <div id="category_search_results" class="space-y-1 max-h-40 overflow-y-auto hidden"></div>
+                        
+                        <input type="hidden" name="category_id" id="category_id_hidden" value="{{ $currentCatId }}" required>
                         @error('category_id') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <div class="space-y-1">
+                    <!-- Tags Selection -->
+                    <div class="space-y-1 pt-4 border-t border-slate-100">
                         <label class="block text-sm font-medium text-slate-700">Tags</label>
-                        <div class="max-h-40 overflow-y-auto border border-slate-300 rounded-lg p-2 bg-white space-y-2">
-                            @foreach($tags as $tag)
-                            <label class="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
-                                <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="rounded text-brand-500 focus:ring-brand-500" {{ in_array($tag->id, old('tags', $article->tags->pluck('id')->toArray())) ? 'checked' : '' }}>
-                                {{ $tag->title }}
-                            </label>
-                            @endforeach
+                        
+                        <!-- Selected Tags Display -->
+                        <div id="selected_tags_display" class="mb-2 min-h-[42px] p-2 rounded-lg border border-slate-200 bg-slate-50 flex flex-wrap gap-2">
+                            @php 
+                                $selectedTagIds = old('tags', $article->tags->pluck('id')->toArray());
+                            @endphp
+                            @if(count($selectedTagIds) > 0)
+                                @foreach($selectedTagIds as $tagId)
+                                    @php $tag = $tags->find($tagId); @endphp
+                                    @if($tag)
+                                        <span class="selected-tag-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-200 text-slate-700 text-sm font-medium" data-id="{{ $tag->id }}">
+                                            {{ $tag->title }}
+                                            <button type="button" class="remove-tag-btn hover:bg-slate-300 rounded-full p-0.5 transition-colors" data-id="{{ $tag->id }}">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                            </button>
+                                        </span>
+                                        <input type="hidden" name="tags[]" value="{{ $tag->id }}">
+                                    @endif
+                                @endforeach
+                            @else
+                                <span class="text-xs text-slate-400 italic empty-message">No tags selected</span>
+                            @endif
                         </div>
+
+                        <!-- Tag Search -->
+                        <div class="relative mb-2">
+                            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            <input type="search" id="tag_search_input" placeholder="Search tags..." class="w-full rounded-lg border border-slate-300 bg-white pl-10 pr-4 py-2 text-sm text-slate-900 focus:border-brand-500 focus:outline-none transition-all">
+                        </div>
+
+                        <!-- Tag Results -->
+                        <div id="tag_search_results" class="space-y-1 max-h-40 overflow-y-auto hidden"></div>
                     </div>
                 </section>
 
@@ -200,7 +249,112 @@
             var form = document.querySelector('form');
             form.addEventListener('submit', function() {
                 var content = document.querySelector('#content');
-                content.value = quill.root.innerHTML;
+                if(content) content.value = quill.root.innerHTML;
+            });
+
+            // Category Search Logic
+            let catSearchTimeout = null;
+            $(document).on('keyup', '#category_search_input', function() {
+                let query = $(this).val();
+                if(catSearchTimeout) clearTimeout(catSearchTimeout);
+                if(query.length === 0) {
+                    $('#category_search_results').addClass('hidden').empty();
+                    return;
+                }
+                catSearchTimeout = setTimeout(() => {
+                    $.ajax({
+                        url: "{{ route('categories.search') }}",
+                        method: 'POST',
+                        data: { query: query, _token: '{{ csrf_token() }}' },
+                        success: function(response) {
+                            if(response.success) {
+                                let html = '';
+                                response.data.forEach(item => {
+                                    html += `<button type="button" class="category-result-btn w-full text-left px-3 py-2 rounded-lg border border-slate-200 bg-white hover:bg-brand-50 transition-all outline-none text-sm" data-id="${item.id}" data-title="${item.title}">${item.title}</button>`;
+                                });
+                                $('#category_search_results').removeClass('hidden').html(html || '<p class="text-xs p-2 text-slate-400">No results</p>');
+                            }
+                        }
+                    });
+                }, 300);
+            });
+
+            $(document).on('click', '.category-result-btn', function() {
+                let id = $(this).data('id');
+                let title = $(this).data('title');
+                $('#category_id_hidden').val(id);
+                $('#selected_category_display').html(`
+                    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-100 text-brand-700 text-sm font-medium">
+                        ${title}
+                        <button type="button" class="remove-category-btn hover:bg-brand-200 rounded-full p-0.5 transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </span>
+                `);
+                $('#category_search_results').addClass('hidden').empty();
+                $('#category_search_input').val('');
+            });
+
+            $(document).on('click', '.remove-category-btn', function() {
+                $('#category_id_hidden').val('');
+                $('#selected_category_display').html('<span class="text-xs text-slate-400 italic empty-message">No category selected</span>');
+            });
+
+            // Tag Search Logic
+            let tagSearchTimeout = null;
+            $(document).on('keyup', '#tag_search_input', function() {
+                let query = $(this).val();
+                if(tagSearchTimeout) clearTimeout(tagSearchTimeout);
+                if(query.length === 0) {
+                    $('#tag_search_results').addClass('hidden').empty();
+                    return;
+                }
+                tagSearchTimeout = setTimeout(() => {
+                    $.ajax({
+                        url: "{{ route('tags.search') }}",
+                        method: 'POST',
+                        data: { query: query, _token: '{{ csrf_token() }}' },
+                        success: function(response) {
+                            if(response.success) {
+                                let html = '';
+                                response.data.forEach(item => {
+                                    if(!$(`input[name="tags[]"][value="${item.id}"]`).length) {
+                                        html += `<button type="button" class="tag-result-btn w-full text-left px-3 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 transition-all outline-none text-sm" data-id="${item.id}" data-title="${item.title}">${item.title}</button>`;
+                                    }
+                                });
+                                $('#tag_search_results').removeClass('hidden').html(html || '<p class="text-xs p-2 text-slate-400">No new results</p>');
+                            }
+                        }
+                    });
+                }, 300);
+            });
+
+            $(document).on('click', '.tag-result-btn', function() {
+                let id = $(this).data('id');
+                let title = $(this).data('title');
+                if(!$('#selected_tags_display .selected-tag-badge').length) {
+                    $('#selected_tags_display').empty();
+                }
+                $('#selected_tags_display').append(`
+                    <span class="selected-tag-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-200 text-slate-700 text-sm font-medium" data-id="${id}">
+                        ${title}
+                        <button type="button" class="remove-tag-btn hover:bg-slate-300 rounded-full p-0.5 transition-colors" data-id="${id}">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </span>
+                    <input type="hidden" name="tags[]" value="${id}">
+                `);
+                $(this).remove();
+                if(!$('#tag_search_results button').length) $('#tag_search_results').addClass('hidden');
+            });
+
+            $(document).on('click', '.remove-tag-btn', function() {
+                let id = $(this).data('id');
+                $(this).closest('.selected-tag-badge').remove();
+                $(`input[name="tags[]"][value="${id}"]`).remove();
+                if(!$('#selected_tags_display .selected-tag-badge').length) {
+                    $('#selected_tags_display').html('<span class="text-xs text-slate-400 italic empty-message">No tags selected</span>');
+                }
             });
         });
     </script>

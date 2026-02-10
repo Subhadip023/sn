@@ -81,7 +81,7 @@
             </table>
         </div>
         <div class="mt-4">
-            {{ $articles->links() }}
+            {{ $articles->links('vendor.pagination.custom') }}
         </div>
     </section>
 </x-admin-layout>

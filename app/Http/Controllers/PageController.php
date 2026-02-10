@@ -70,7 +70,14 @@ class PageController extends Controller
      */
     public function update(UpdatePageRequest $request, Page $page)
     {
-        //
+        try {
+            // dd($request->all());
+            $valData = $request->validated();
+            $page->update($valData);
+            return redirect()->route('pages.index')->with('success', 'Page updated successfully');
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     /**
@@ -78,7 +85,12 @@ class PageController extends Controller
      */
     public function destroy(Page $page)
     {
-        //
+        try {
+            $page->delete();
+            return redirect()->route('pages.index')->with('success', 'Page deleted successfully');
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
     }
 
     /**

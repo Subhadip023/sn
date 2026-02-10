@@ -3,11 +3,11 @@
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
             <span class="px-4 py-2 bg-gray-100 text-gray-400 rounded cursor-not-allowed flex items-center gap-1">
-                <i class="fas fa-chevron-left"></i>
+                <i class="fas fa-chevron-left"></i> Prev
             </span>
         @else
             <a href="{{ $paginator->previousPageUrl() }}" rel="prev" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors flex items-center gap-1">
-                <i class="fas fa-chevron-left"></i>
+                <i class="fas fa-chevron-left"></i> Prev
             </a>
         @endif
 

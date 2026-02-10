@@ -48,7 +48,7 @@
         <section class="lg:col-span-2 rounded-xl border border-slate-200 bg-white p-5 space-y-4 shadow-sm">
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-slate-900">All Categories</h2>
-                <span class="text-sm text-slate-500">{{ $categories->count() }} categories</span>
+                <span class="text-sm text-slate-500">{{ $categories->total() }} categories</span>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
@@ -85,6 +85,9 @@
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+            <div class="mt-4">
+                {{ $categories->links('vendor.pagination.custom') }}
             </div>
         </section>
     </div>
