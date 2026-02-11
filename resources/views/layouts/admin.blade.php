@@ -200,6 +200,12 @@
         </x-admin.nav-link>
 
         <x-admin.nav-link
+          href="{{ route('newsletter.index') }}"
+          :active="request()->routeIs('newsletter.*')">
+          Newsletter
+        </x-admin.nav-link>
+
+        <x-admin.nav-link
           href="/"
           :active="request()->is('admin/site*')">
           Site

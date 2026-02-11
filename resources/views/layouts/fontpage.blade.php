@@ -65,29 +65,24 @@
   <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <style>
         @keyframes ticker {
-            0% {
-                transform: translateY(0);
-            }
-
-            25% {
-                transform: translateY(-100%);
-            }
-
-            50% {
-                transform: translateY(-200%);
-            }
-
-            75% {
-                transform: translateY(-100%);
-            }
-
-            100% {
-                transform: translateY(0);
-            }
+            0% { transform: translateY(0); }
+            10% { transform: translateY(-10%); }
+            20% { transform: translateY(-20%); }
+            30% { transform: translateY(-30%); }
+            40% { transform: translateY(-40%); }
+            50% { transform: translateY(-50%); }
+            60% { transform: translateY(-60%); }
+            70% { transform: translateY(-70%); }
+            80% { transform: translateY(-80%); }
+            90% { transform: translateY(-90%); }
+            100% { transform: translateY(0); }
         }
 
         .ticker ul {
-            animation: ticker 20s linear infinite;
+            animation: ticker 20s cubic-bezier(1, 0, 0.5, 0) infinite;
+        }
+        .ticker ul:hover {
+            animation-play-state: paused;
         }
 
         @keyframes bounce {

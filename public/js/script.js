@@ -127,9 +127,33 @@ function setupSubscriptionPopup() {
         e.preventDefault();
         const email = emailInput.value.trim();
         if (email) {
-            localStorage.setItem('newsletterSubscribed', 'true');
-            hidePopup();
-            alert('Thank you for subscribing!');
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        localStorage.setItem('newsletterSubscribed', 'true');
+                        hidePopup();
+                        alert('Thank you for subscribing!');
+                    } else if (data.errors) {
+                        const errorMessages = Object.values(data.errors).flat().join('\n');
+                        alert('Validation error:\n' + errorMessages);
+                    } else {
+                        alert('Something went wrong: ' + (data.message || 'Error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
         }
     });
 }
