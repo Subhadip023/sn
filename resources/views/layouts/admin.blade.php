@@ -211,6 +211,13 @@
           Site
         </x-admin.nav-link>
 
+        <form method="POST" action="{{ route('logout') }}" id="logout-form" class="hidden">
+          @csrf
+        </form>
+        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-3 py-2 rounded-lg hover:bg-red-50 text-red-600 hover:text-red-700 font-medium transition-colors">
+          <i class="fas fa-sign-out-alt mr-1.5"></i> Logout
+        </a>
+
       </nav>
 
       <div class="mt-auto p-4 text-xs text-slate-400">Connected: newsroom / prod</div>
