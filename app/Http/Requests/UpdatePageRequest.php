@@ -27,6 +27,7 @@ class UpdatePageRequest extends FormRequest
             'content' => 'nullable|string',
             'position' => 'nullable|integer',
             'active' => 'nullable|boolean',
+            'hide_articles' => 'nullable|boolean',
         ];
     }
 }

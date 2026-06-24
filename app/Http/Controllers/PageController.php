@@ -62,7 +62,7 @@ class PageController extends Controller
      */
     public function edit(Page $page)
     {
-        //
+        return view('admin.pages.edit', compact('page'));
     }
 
     /**
@@ -71,8 +71,8 @@ class PageController extends Controller
     public function update(UpdatePageRequest $request, Page $page)
     {
         try {
-            // dd($request->all());
             $valData = $request->validated();
+            $valData['hide_articles'] = $request->has('hide_articles') ? true : false;
             $page->update($valData);
             return redirect()->route('pages.index')->with('success', 'Page updated successfully');
         } catch (\Throwable $th) {
@@ -124,14 +124,20 @@ class PageController extends Controller
 
     public function updateSettings(Request $request) {
         try {
-            // dd($request->all());
-            $data=$request->except('_token');
-            $categoryIds = $request->categories;
-            $tagIds = $request->tags;
-            $page = Page::find($data['page_id']);
+            $data = $request->except('_token');
+            $categoryIds = $request->categories ?? [];
+            $tagIds = $request->tags ?? [];
+            
+            $page = Page::findOrFail($data['page_id']);
             $page->categories()->sync($categoryIds);
             $page->tags()->sync($tagIds);
-            return redirect()->route('page.settings', $page->id)->with('success', 'Page settings updated successfully')->with('success', 'Page settings updated successfully');
+            
+            $page->update([
+                'content' => $request->input('content'),
+                'hide_articles' => $request->has('hide_articles') ? true : false,
+            ]);
+            
+            return redirect()->route('page.settings', $page->id)->with('success', 'Page settings updated successfully');
 
         } catch (\Throwable $th) {
             return back()->with('error', $th->getMessage());

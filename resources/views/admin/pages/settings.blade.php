@@ -119,6 +119,26 @@
                 </div>
             </div>
 
+            <!-- Custom Page Content Section -->
+            <div class="border-t border-slate-200 p-8">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-slate-900">Page Content</h2>
+                    <p class="text-sm text-slate-500 mt-1">Add custom content/text for this page (e.g. for static pages like "About Us" or "Contact Us"). Leave blank if you only want to display selected categories/tags articles.</p>
+                </div>
+                
+                <div class="mb-6 flex items-center gap-2.5">
+                    <input type="checkbox" name="hide_articles" id="hide_articles" value="1" {{ $page->hide_articles ? 'checked' : '' }} class="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500">
+                    <label for="hide_articles" class="text-sm font-medium text-slate-700 select-none">Hide dynamic articles grid and sidebar on this page</label>
+                </div>
+
+                <div class="space-y-1">
+                    <div id="editor" style="height: 250px;" class="bg-white rounded-b-lg border border-slate-300 border-t-0">
+                        {!! old('content', $page->content) !!}
+                    </div>
+                    <input type="hidden" name="content" id="content">
+                </div>
+            </div>
+
             <!-- Footer with Save Button -->
             <div class="border-t border-slate-200 bg-slate-50 px-8 py-4">
                 <div class="flex items-center justify-between">
@@ -469,4 +489,26 @@
             $('#search_tag_input').val('');
             $('.tags_div').html('<p class="text-xs text-slate-400 italic">Start typing to search tags...</p>');
         });
+
+        // Initialize Quill Editor
+        if (typeof Quill !== 'undefined') {
+            var quill = new Quill('#editor', {
+                theme: 'snow',
+                placeholder: 'Write your page content here...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Sync editor content to hidden input on form submit
+            $('#settting_form').on('submit', function() {
+                $('#content').val(quill.root.innerHTML);
+            });
+        }
 </script>
