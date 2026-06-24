@@ -1,9 +1,29 @@
 {
+    "name": "sn",
+    "version": "1.0.0",
     "private": true,
+    "description": "<p align=\"center\"><a href=\"https://laravel.com\" target=\"_blank\"><img src=\"https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg\" width=\"400\" alt=\"Laravel Logo\"></a></p>",
+    "homepage": "https://github.com/Subhadip023/sn#readme",
+    "bugs": {
+        "url": "https://github.com/Subhadip023/sn/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Subhadip023/sn.git"
+    },
+    "license": "ISC",
+    "author": "",
     "type": "module",
+    "main": "postcss.config.js",
+    "directories": {
+        "test": "tests"
+    },
     "scripts": {
         "build": "vite build",
         "dev": "vite"
+    },
+    "dependencies": {
+        "chart.js": "^4.5.1"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.2",
@@ -15,8 +35,5 @@
         "postcss": "^8.4.31",
         "tailwindcss": "^3.1.0",
         "vite": "^6.0.11"
-    },
-    "dependencies": {
-        "chart.js": "^4.5.1"
     }
 }
