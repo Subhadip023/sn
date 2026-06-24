@@ -185,9 +185,9 @@
     <!-- Main Header -->
     <header class="py-4 border-b-2 border-primary-red">
         <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
-            <div class="text-4xl font-bold tracking-tight">
-                <span class="text-primary-red">Sohoj </span><span class="text-primary-blue">News</span>
-            </div>
+            <a href="/" class="hover:opacity-90 transition-opacity block">
+                <img src="{{ asset('logo.jpeg') }}" class="h-14 w-auto object-contain" alt="Logo" />
+            </a>
             <div class="text-right text-gray-600 text-sm">
                 <span id="date"></span>
                 <span id="time" class="ml-2"></span>

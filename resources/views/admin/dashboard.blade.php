@@ -7,7 +7,9 @@
           </div>
           <div class="flex items-center gap-3">
             <button id="themeBtn" class="px-4 py-2 rounded-lg border border-slate-200 hover:border-slate-300 text-slate-700">Theme</button>
-            <a class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-semibold" href="/admin/content">Open content</a>
+            <a class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white font-semibold transition-colors duration-200 flex items-center gap-2 shadow-sm" href="{{ route('articles.create') }}">
+              <i class="fas fa-folder-open"></i> Open content
+            </a>
           </div>
         </header>
 

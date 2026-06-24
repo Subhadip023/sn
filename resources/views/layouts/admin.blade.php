@@ -129,8 +129,10 @@
         extend: {
           colors: {
             brand: {
+              400: '#7c8fff',
               500: '#5164ff',
-              400: '#7c8fff'
+              600: '#3b4df2',
+              700: '#2c3bc6'
             },
             ink: '#0b1221'
           }
@@ -145,11 +147,10 @@
 <body class="bg-slate-50 text-slate-900">
   <div class="min-h-screen grid lg:grid-cols-[260px_1fr]">
     <aside class="border-r border-slate-200 bg-white flex flex-col">
-      <div class="p-4 flex items-center gap-2 text-lg font-semibold">
-        <div class="h-9 w-9 rounded-xl bg-brand-500 flex items-center justify-center text-white">N</div>
-        <div>
-          <div>{{ config('app.name') }}</div>
-          <p class="text-xs text-slate-500">admin</p>
+      <div class="p-4 border-b border-slate-100">
+        <div class="flex items-center justify-between gap-2">
+          <img src="{{ asset('logo.jpeg') }}" class="h-8 w-auto object-contain" alt="Logo" />
+          <span class="text-[10px] text-brand-600 bg-brand-50 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Admin</span>
         </div>
       </div>
       <nav class="px-3 space-y-2 text-sm main-nav">
