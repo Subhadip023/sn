@@ -24,7 +24,9 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
+            TranslationSeeder::class,
             ArticlesSeeder::class,
+            BengaliContentSeeder::class,
             PageSeeder::class,
         ]);
     }

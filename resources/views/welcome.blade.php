@@ -1,7 +1,7 @@
 <x-font-layout title="Home" :pages="$pages ?? []">
-      <!-- Breaking News Ticker -->
+        <!-- Breaking News Ticker -->
         <div class="bg-gray-100 py-2 my-4 border-l-4 border-primary-red flex items-center">
-            <span class="bg-primary-red text-white px-3 py-0.5 mr-4 font-semibold uppercase text-xs whitespace-nowrap">Breaking:</span>
+            <span class="bg-primary-red text-white px-3 py-0.5 mr-4 font-semibold uppercase text-xs whitespace-nowrap">{{ __('Breaking:') }}</span>
             <div class="flex-1 overflow-hidden h-6 ticker">
                 <ul class="list-none">
                     @foreach($articles->take(10) as $article)
@@ -17,7 +17,7 @@
         @if($top_story)
         <section class="grid md:grid-cols-2 gap-8 my-8">
             <div class="py-5">
-                <span class="inline-block bg-primary-red text-white px-3 py-1 rounded text-xs font-semibold uppercase mb-4">{{ $top_story->category->title ?? 'TOP STORY' }}</span>
+                <span class="inline-block bg-primary-red text-white px-3 py-1 rounded text-xs font-semibold uppercase mb-4">{{ $top_story->category->title ?? __('TOP STORY') }}</span>
                 <h1 class="text-3xl md:text-4xl font-semibold mb-4 leading-tight">
                     <a href="{{ url('/article/' . $top_story->slug) }}" class="hover:text-primary-red transition-colors">
                         {{ $top_story->title }}
@@ -29,7 +29,7 @@
                     <span>|</span>
                     <span>{{ $top_story->created_at->diffForHumans() }}</span>
                     <span>|</span>
-                    <a href="{{ url('/article/' . $top_story->slug) }}" class="text-primary-red font-semibold hover:underline">Read More</a>
+                    <a href="{{ url('/article/' . $top_story->slug) }}" class="text-primary-red font-semibold hover:underline">{{ __('Read More') }}</a>
                 </div>
             </div>
             <div>
@@ -59,8 +59,8 @@
         <!-- More News Section -->
         <section class="my-12">
             <div class="flex justify-between items-center mb-5 pb-2.5 border-b-2 border-gray-200">
-                <h2 class="text-2xl font-semibold">Latest Updates</h2>
-                <a href="#" class="text-primary-blue font-medium hover:text-primary-red transition-colors">View All <i class="fas fa-arrow-right ml-1"></i></a>
+                <h2 class="text-2xl font-semibold">{{ __('Latest Updates') }}</h2>
+                <a href="#" class="text-primary-blue font-medium hover:text-primary-red transition-colors">{{ __('View All') }} <i class="fas fa-arrow-right ml-1"></i></a>
             </div>
             <div class="space-y-4">
                 @foreach($latest_articles->skip(3)->take(10) as $article)

@@ -36,6 +36,7 @@ class StoreArticlesRequest extends FormRequest
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
             'canonical_url' => 'nullable|url',
+            'lang' => 'required|string|max:10',
         ];
     }
 }

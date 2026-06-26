@@ -49,6 +49,7 @@ class PageSeeder extends Seeder
                     'title' => $p['title'],
                     'slug' => $p['slug'],
                     'position' => $p['position'],
+                    'lang' => 'en',
                     'active' => true,
                 ]);
             }

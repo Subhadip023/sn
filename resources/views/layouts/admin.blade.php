@@ -207,6 +207,12 @@
         </x-admin.nav-link>
 
         <x-admin.nav-link
+          href="{{ route('translations.index') }}"
+          :active="request()->routeIs('translations.*')">
+          Translations
+        </x-admin.nav-link>
+
+        <x-admin.nav-link
           href="/"
           :active="request()->is('admin/site*')">
           Site

@@ -23,6 +23,7 @@
                         <th class="py-2 font-medium">Author</th>
                         <th class="py-2 font-medium">Category</th>
                         <th class="py-2 font-medium">Tags</th>
+                        <th class="py-2 font-medium">Language</th>
 
                         <th class="py-2 font-medium">Status</th>
                         <th class="py-2 font-medium">Views</th>
@@ -40,6 +41,7 @@
                         <td class="py-2 text-slate-600">{{ $article->author->name ?? 'Unknown' }}</td>
                         <td class="py-2 text-slate-600">{{ $article->category->title ?? 'Uncategorized' }}</td>
                         <td class="py-2 text-slate-600">{{ $article->tags->implode('title', ', ') ?? '-' }}</td>
+                        <td class="py-2 text-slate-600 uppercase">{{ $article->lang }}</td>
                         <td class="py-2">
                             <span class="px-2 py-1 rounded-full {{ $article->status === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }} text-xs font-medium">
                                 {{ ucfirst($article->status) }}
@@ -74,7 +76,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td class="py-2 text-slate-900 text-center" colspan="7">No articles found.</td>
+                        <td class="py-2 text-slate-900 text-center" colspan="9">No articles found.</td>
                     </tr>
                     @endforelse
                 </tbody>

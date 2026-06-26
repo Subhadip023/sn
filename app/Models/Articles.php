@@ -28,6 +28,7 @@ class Articles extends Model
         'author_id',
         'status',
         'views',
+        'lang',
     ];
 
     public function category()

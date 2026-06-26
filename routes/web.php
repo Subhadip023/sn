@@ -7,8 +7,11 @@ use App\Models\Articles;
 use App\Http\Controllers\NewsLatterController;
 
 Route::get('/', function () {
-    $pages = Page::where('active', true)->orderBy('position', 'asc')->get()->toArray();
-    $articles = Articles::where('status', 'published')->orderBy('created_at', 'desc')->get();
+    $pages = Page::where('active', true)->where('lang', app()->getLocale())->orderBy('position', 'asc')->get()->toArray();
+    $articles = Articles::where('status', 'published')
+        ->where('lang', app()->getLocale())
+        ->orderBy('created_at', 'desc')
+        ->get();
 
     $top_story = $articles->first();
     // Slice enough articles to allow for skipping 3 and taking 10, plus the top story.
@@ -24,18 +27,20 @@ Route::get('/', function () {
 
 Route::get('/article/{slug}', function ($slug) {
     $article = Articles::with(['category', 'author', 'tags'])->where('slug', $slug)->firstOrFail();
-    $pages = Page::where('active', true)->orderBy('position', 'asc')->get()->toArray();
-    $latest_articles = Articles::where('status', 'published')->where('id', '!=', $article->id)->orderBy('created_at', 'desc')->take(5)->get();
+    $pages = Page::where('active', true)->where('lang', app()->getLocale())->orderBy('position', 'asc')->get()->toArray();
+    $latest_articles = Articles::where('status', 'published')->where('lang', app()->getLocale())->where('id', '!=', $article->id)->orderBy('created_at', 'desc')->take(5)->get();
 
     return view('admin.articles.show')->with('article', $article)->with('pages', $pages)->with('latest_articles', $latest_articles);
 })->name('article.show');
 
 Route::get('/page/{slug}', function ($slug) {
     $page = Page::with('categories.articles', 'tags')->where('slug', $slug)->first();
-    $pages = Page::where('active', true)->orderBy('position', 'asc')->get()->toArray();
+    $pages = Page::where('active', true)->where('lang', app()->getLocale())->orderBy('position', 'asc')->get()->toArray();
     $categoryIds = $page->categories->pluck('id');
     $tagIds      = $page->tags->pluck('id');
-    $articles_query = Articles::where('status', 'published')->where(function ($q) use ($categoryIds, $tagIds) {
+    $articles_query = Articles::where('status', 'published')
+        ->where('lang', app()->getLocale())
+        ->where(function ($q) use ($categoryIds, $tagIds) {
 
         // from categories
         if ($categoryIds->isNotEmpty()) {
@@ -58,7 +63,7 @@ Route::get('/page/{slug}', function ($slug) {
         return $q->where('id', '!=', $top_story->id);
     })->paginate(6);
 
-    $most_populer_posts = Articles::where('status', 'published')->orderBy('views', 'desc')->take(3)->get();
+    $most_populer_posts = Articles::where('status', 'published')->where('lang', app()->getLocale())->orderBy('views', 'desc')->take(3)->get();
     return view('page')->with('page', $page)->with('pages', $pages)->with('articles', $articles)->with('top_story', $top_story)->with('most_populer_posts', $most_populer_posts);
 });
 
@@ -81,3 +86,10 @@ require __DIR__ . '/admin.php';
 
 
 require __DIR__ . '/auth.php';
+
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'bn'])) {
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('lang.switch');

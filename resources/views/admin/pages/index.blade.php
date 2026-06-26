@@ -30,6 +30,7 @@
                         <th class="py-2 font-medium">Position</th>
                         <th class="py-2 font-medium">Title</th>
                         <th class="py-2 font-medium">Slug</th>
+                        <th class="py-2 font-medium w-24">Language</th>
                         <th class="py-2 font-medium">Status</th>
                         <th class="py-2 font-medium">Last Modified</th>
                         <th class="py-2 font-medium text-right">Action</th>
@@ -38,7 +39,7 @@
                 <tbody id="sortable-pages" class="divide-y divide-slate-100">
                     @if($pages->isEmpty())
                     <tr>
-                        <td class="py-2 text-slate-900" colspan="7">No pages found</td>
+                        <td class="py-2 text-slate-900" colspan="8">No pages found</td>
                     </tr>
                     @else
                         @foreach ($pages as $page)
@@ -54,6 +55,11 @@
                             </td>
                             <td class="py-2 text-slate-900 font-medium">{{ $page->title }}</td>
                             <td class="py-2 text-slate-600">{{ $page->slug }}</td>
+                            <td class="py-2">
+                                <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider {{ $page->lang === 'en' ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-red-800' }}">
+                                    {{ $page->lang }}
+                                </span>
+                            </td>
                             <td class="py-2">
                                 <form action="{{ route('pages.update', $page) }}" method="POST" class="inline-block">
                                     @csrf

@@ -39,11 +39,25 @@
             <div class="flex items-end justify-between">
 
             <div class="space-y-2 w-1/3 px-2">
+                <label for="lang" class="block text-sm font-medium text-slate-700">Language</label>
+                <select name="lang" id="lang" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-brand-500 focus:outline-none">
+                    <option value="en" selected>English</option>
+                    <option value="bn">Bengali</option>
+                </select>
+                @error('lang')
+                    <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="space-y-2 w-1/3 px-2">
                 <label for="status" class="block text-sm font-medium text-slate-700">Active</label>
                 <select name="active" id="status" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 focus:border-brand-500 focus:outline-none">
                     <option value="1" selected>yes</option>
                     <option value="0">no</option>
                 </select>
+                @error('active')
+                    <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="flex items-center gap-3 pt-4 ">

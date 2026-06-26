@@ -28,6 +28,7 @@ class UpdatePageRequest extends FormRequest
             'position' => 'nullable|integer',
             'active' => 'nullable|boolean',
             'hide_articles' => 'nullable|boolean',
+            'lang' => 'nullable|string|max:10',
         ];
     }
 }

@@ -38,6 +38,17 @@
                     </select>
                 </div>
 
+                <div class="space-y-1">
+                    <label for="lang" class="block text-sm font-medium text-slate-700">Language <span class="text-rose-500">*</span></label>
+                    <select name="lang" id="lang" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none" required>
+                        <option value="en" selected>English</option>
+                        <option value="bn">Bengali</option>
+                    </select>
+                    @error('lang')
+                        <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div class="pt-2">
                     <button type="submit" class="w-full px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold">Create Category</button>
                 </div>
@@ -56,6 +67,7 @@
                         <tr class="text-left">
                             <th class="py-2 font-medium">Title</th>
                             <th class="py-2 font-medium">Slug</th>
+                            <th class="py-2 font-medium">Language</th>
                             <th class="py-2 font-medium">Status</th>
                             <th class="py-2 font-medium">Action</th>
                         </tr>
@@ -65,6 +77,7 @@
                         <tr>
                             <td class="py-2 text-slate-900">{{ $category->title }}</td>
                             <td class="py-2 text-slate-600">{{ $category->slug }}</td>
+                            <td class="py-2 text-slate-600 uppercase">{{ $category->lang }}</td>
                             <td class="py-2">
                                 <span class="px-2 py-1 rounded-full {{ $category->active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }} text-xs font-medium">
                                     {{ $category->active ? 'Active' : 'Inactive' }}
@@ -80,7 +93,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td class="py-2 text-slate-900 text-center" colspan="4">No categories found.</td>
+                            <td class="py-2 text-slate-900 text-center" colspan="5">No categories found.</td>
                         </tr>
                         @endforelse
                     </tbody>

@@ -96,6 +96,15 @@
                         @error('published_at') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
                     </div>
 
+                    <div class="space-y-1">
+                        <label for="lang" class="block text-sm font-medium text-slate-700">Language <span class="text-rose-500">*</span></label>
+                        <select name="lang" id="lang" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none" required>
+                            <option value="en" {{ old('lang') == 'en' ? 'selected' : '' }}>English</option>
+                            <option value="bn" {{ old('lang') == 'bn' ? 'selected' : '' }}>Bengali</option>
+                        </select>
+                        @error('lang') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
                     <button type="submit" class="w-full px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold">Save Article</button>
                     <a href="{{ route('articles.index') }}" class="block text-center w-full px-4 py-2 rounded-lg border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium">Cancel</a>
                 </section>

@@ -165,20 +165,26 @@
     <nav class="bg-gray-100 border-b border-gray-200 text-sm py-1">
         <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
             <div class="flex gap-4">
-                <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-bolt mr-1"></i> Live TV</span>
-                <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="far fa-newspaper mr-1"></i> ePaper</span>
-                <span onclick="showPopup();" class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-bell mr-1"></i> Daily Newsletter</span>
+                <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-bolt mr-1"></i> {{ __('Live TV') }}</span>
+                <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="far fa-newspaper mr-1"></i> {{ __('ePaper') }}</span>
+                <span onclick="showPopup();" class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-bell mr-1"></i> {{ __('Daily Newsletter') }}</span>
             </div>
-            @auth
-            <a href="{{ route('dashboard') }}">
-                <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-user mr-1"></i> Dashboard</span>
-            </a>
-            @endauth
-            @guest
-            <a href="{{ route('login') }}">
-                <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-sign-in-alt mr-1"></i> Sign In</span>
-            </a>
-            @endguest
+            <div class="flex items-center gap-4">
+                <div class="flex gap-1 mr-2 border border-gray-300 rounded px-1 py-0.5 bg-white">
+                    <a href="{{ route('lang.switch', 'en') }}" class="px-1.5 py-0.5 rounded text-xs {{ app()->getLocale() == 'en' ? 'bg-primary-red text-white' : 'text-gray-600 hover:text-primary-red' }} font-bold transition-all">EN</a>
+                    <a href="{{ route('lang.switch', 'bn') }}" class="px-1.5 py-0.5 rounded text-xs {{ app()->getLocale() == 'bn' ? 'bg-primary-red text-white' : 'text-gray-600 hover:text-primary-red' }} font-bold transition-all">BN</a>
+                </div>
+                @auth
+                <a href="{{ route('dashboard') }}">
+                    <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-user mr-1"></i> {{ __('Dashboard') }}</span>
+                </a>
+                @endauth
+                @guest
+                <a href="{{ route('login') }}">
+                    <span class="cursor-pointer hover:text-primary-red transition-colors"><i class="fas fa-sign-in-alt mr-1"></i> {{ __('Sign In') }}</span>
+                </a>
+                @endguest
+            </div>
         </div>
     </nav>
 
@@ -199,7 +205,7 @@
     <nav class="bg-white border-b border-gray-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4">
             <ul class="flex overflow-x-auto whitespace-nowrap py-2.5 gap-5">
-                <li class=""><a href="/" class="py-2.5 font-medium {{ request()->is('/') ? 'text-primary-red hover:text-gray-800 border-b-2 border-primary-red' : 'text-gray-800 hover:text-primary-red' }}   block"><i class="fas fa-home mr-1"></i> Home</a></li>
+                <li class=""><a href="/" class="py-2.5 font-medium {{ request()->is('/') ? 'text-primary-red hover:text-gray-800 border-b-2 border-primary-red' : 'text-gray-800 hover:text-primary-red' }}   block"><i class="fas fa-home mr-1"></i> {{ __('Home') }}</a></li>
                 @if(count($pages) > 0)
                     @foreach ($pages as $page)
                     <li class="{{ request()->is('page/'.$page['slug']) ? 'text-primary-red' : '' }}"><a href="/page/{{ $page['slug'] }}" class="py-2.5 font-medium {{ request()->is('page/'.$page['slug']) ? 'text-primary-red hover:text-gray-800 border-b-2 border-primary-red' : 'text-gray-800 hover:text-primary-red' }}   transition-colors block">{{ $page['title'] }}</a></li>
@@ -220,7 +226,7 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
                 <div>
-                    <h4 class="text-white mb-5 text-lg relative pb-2.5 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-10 after:h-0.5 after:bg-primary-red">Trending Topics</h4>
+                    <h4 class="text-white mb-5 text-lg relative pb-2.5 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-10 after:h-0.5 after:bg-primary-red">{{ __('Trending Topics') }}</h4>
                     <ul class="space-y-2.5">
                         <li><a href="#" class="hover:text-white hover:pl-1 transition-all block">Election 2024</a></li>
                         <li><a href="#" class="hover:text-white hover:pl-1 transition-all block">Stock Market</a></li>
@@ -229,7 +235,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-white mb-5 text-lg relative pb-2.5 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-10 after:h-0.5 after:bg-primary-red">Services</h4>
+                    <h4 class="text-white mb-5 text-lg relative pb-2.5 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-10 after:h-0.5 after:bg-primary-red">{{ __('Services') }}</h4>
                     <ul class="space-y-2.5">
                         <li><a href="#" class="hover:text-white hover:pl-1 transition-all block">ePaper</a></li>
                         <li><a href="#" class="hover:text-white hover:pl-1 transition-all block">Subscribe</a></li>
@@ -238,7 +244,7 @@
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-white mb-5 text-lg relative pb-2.5 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-10 after:h-0.5 after:bg-primary-red">Follow Us</h4>
+                    <h4 class="text-white mb-5 text-lg relative pb-2.5 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-10 after:h-0.5 after:bg-primary-red">{{ __('Follow Us') }}</h4>
                     <div class="flex gap-4">
                         <a href="#" class="w-9 h-9 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary-red hover:-translate-y-1 transition-all"><i class="fab fa-facebook"></i></a>
                         <a href="#" class="w-9 h-9 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary-red hover:-translate-y-1 transition-all"><i class="fab fa-twitter"></i></a>

@@ -15,6 +15,7 @@ class Category extends Model
         'title',
         'slug',
         'active',
+        'lang',
     ];
 
     public function pages()
