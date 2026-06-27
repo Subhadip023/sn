@@ -7,6 +7,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\NewsLatterController;
 use App\Http\Controllers\TranslationController;
+use App\Http\Controllers\SettingController;
 
 Route::middleware(['auth','admin'])->prefix('admin')->group(function () {
     Route::post('pages/reorder', [PageController::class, 'reorder'])->name('pages.reorder');
@@ -66,4 +67,7 @@ Route::middleware(['auth','admin'])->prefix('admin')->group(function () {
 
     Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('admin.users');
     Route::post('/users/invite', [App\Http\Controllers\UserController::class, 'invite'])->name('admin.users.invite');
+
+    Route::get('/settings', [SettingController::class, 'edit'])->name('admin.settings.edit');
+    Route::post('/settings', [SettingController::class, 'update'])->name('admin.settings.update');
 });

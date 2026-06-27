@@ -144,7 +144,7 @@
     <aside class="border-r border-slate-200 bg-white flex flex-col">
       <div class="p-4 border-b border-slate-100">
         <div class="flex items-center justify-between gap-2">
-          <img src="{{ asset('logo.jpeg') }}" class="h-8 w-auto object-contain" alt="Logo" />
+          <img src="{{ setting('site_logo') ? asset('storage/' . setting('site_logo')) : asset('logo.jpeg') }}" class="h-8 w-auto object-contain" alt="Logo" />
           <span class="text-[10px] text-brand-600 bg-brand-50 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">User</span>
         </div>
       </div>
@@ -154,6 +154,12 @@
           href="/dashboard"
           :active="request()->is('dashboard')">
           Dashboard
+        </x-admin.nav-link>
+
+        <x-admin.nav-link
+          href="{{ route('profile.edit') }}"
+          :active="request()->routeIs('profile.edit')">
+          My Profile
         </x-admin.nav-link>
 
         <x-admin.nav-link

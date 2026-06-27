@@ -1,29 +1,26 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@php
+    $layout = auth()->user()->role === 0 ? 'user-layout' : 'admin-layout';
+@endphp
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+<x-dynamic-component :component="$layout" title="My Profile">
+    <header class="mb-6">
+        <h1 class="text-2xl font-semibold text-slate-900">My Profile</h1>
+    </header>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+    <div class="grid grid-cols-1 gap-6 max-w-4xl">
+        <!-- Profile Info -->
+        <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            @include('profile.partials.update-profile-information-form')
+        </section>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
-        </div>
+        <!-- Update Password -->
+        <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            @include('profile.partials.update-password-form')
+        </section>
+
+        <!-- Delete User -->
+        <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            @include('profile.partials.delete-user-form')
+        </section>
     </div>
-</x-app-layout>
+</x-dynamic-component>

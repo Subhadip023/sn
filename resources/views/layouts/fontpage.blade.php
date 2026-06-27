@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $meta['title'] ?? ($title ?? 'Sohoj News') }}</title>
+    <title>{{ $meta['title'] ?? ($title ?? setting('site_name', 'Sohoj News')) }}</title>
+    <link rel="icon" type="image/png" href="{{ setting('site_favicon') ? asset('storage/' . setting('site_favicon')) : asset('favicon.ico') }}">
 
     @if(isset($meta))
         @if(isset($meta['description']))
@@ -21,7 +22,7 @@
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
         <meta property="og:url" content="{{ $meta['canonical'] ?? url()->current() }}">
-        <meta property="og:title" content="{{ $meta['title'] ?? ($title ?? 'Sohoj News') }}">
+        <meta property="og:title" content="{{ $meta['title'] ?? ($title ?? setting('site_name', 'Sohoj News')) }}">
         <meta property="og:description" content="{{ $meta['description'] ?? '' }}">
         @if(isset($meta['og_image']))
             <meta property="og:image" content="{{ $meta['og_image'] }}">
@@ -33,7 +34,7 @@
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
         <meta property="twitter:url" content="{{ $meta['canonical'] ?? url()->current() }}">
-        <meta property="twitter:title" content="{{ $meta['title'] ?? ($title ?? 'Sohoj News') }}">
+        <meta property="twitter:title" content="{{ $meta['title'] ?? ($title ?? setting('site_name', 'Sohoj News')) }}">
         <meta property="twitter:description" content="{{ $meta['description'] ?? '' }}">
         @if(isset($meta['og_image']))
             <meta property="twitter:image" content="{{ $meta['og_image'] }}">
@@ -192,7 +193,7 @@
     <header class="py-4 border-b-2 border-primary-red">
         <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
             <a href="/" class="hover:opacity-90 transition-opacity block">
-                <img src="{{ asset('logo.jpeg') }}" class="h-14 w-auto object-contain" alt="Logo" />
+                <img src="{{ setting('site_logo') ? asset('storage/' . setting('site_logo')) : asset('logo.jpeg') }}" class="h-14 w-auto object-contain" alt="Logo" />
             </a>
             <div class="text-right text-gray-600 text-sm">
                 <span id="date"></span>

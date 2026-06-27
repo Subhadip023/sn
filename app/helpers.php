@@ -11,3 +11,10 @@ if (!function_exists('all_roles')) {
        ];
     }
 }
+
+if (!function_exists('setting')) {
+    function setting($key, $default = null)
+    {
+        return \App\Models\Setting::get($key, $default);
+    }
+}
