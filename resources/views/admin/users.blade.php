@@ -41,7 +41,7 @@
                   <td class="py-2 text-slate-900">{{ $user->name }}</td>
                   <td class="py-2 text-slate-600 {{$user->email_verified_at ? 'text-emerald-600' : 'text-red-600'}} ">{{ $user->email }}</td>
                   <td class="py-2 text-slate-600">{{ all_roles()[$user->role] }}</td>
-                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-medium">Active</span></td>
+                  <td class="py-2"><span class="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-medium">{{$user->status}}</span></td>
                   <td class="py-2 space-x-2">
                     <button class="text-slate-500 hover:text-slate-700">Edit</button>
                     <button class="text-amber-600 hover:text-amber-700">Disable</button>
