@@ -150,7 +150,7 @@
       <div class="p-4 border-b border-slate-100">
         <div class="flex items-center justify-between gap-2">
           <img src="{{ asset('logo.jpeg') }}" class="h-8 w-auto object-contain" alt="Logo" />
-          <span class="text-[10px] text-brand-600 bg-brand-50 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Admin</span>
+          <span class="text-[10px] text-brand-600 bg-brand-50 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">{{all_roles()[auth()->user()->role]}}</span>
         </div>
       </div>
       <nav class="px-3 space-y-2 text-sm main-nav">
@@ -171,6 +171,7 @@
             All Articles
           </x-admin.nav-sub-link>
 
+          @if(auth()->user()->role === 1 || auth()->user()->role === 2)
           <x-admin.nav-sub-link href="{{route('categories.index')}}">
             Categories
           </x-admin.nav-sub-link>
@@ -178,9 +179,11 @@
           <x-admin.nav-sub-link href="{{route('tags.index')}}">
             Tags
           </x-admin.nav-sub-link>
+          @endif
 
         </x-admin.nav-dropdown>
 
+        @if(auth()->user()->role === 1)
         <x-admin.nav-dropdown
           title="Pages"
           :active="request()->routeIs('pages.*')">
@@ -192,25 +195,31 @@
           </x-admin.nav-sub-link>
 
         </x-admin.nav-dropdown>
+        @endif
 
-
+        @if(auth()->user()->role === 1)
         <x-admin.nav-link
           href="/admin/users"
           :active="request()->is('admin/users*')">
           Users
         </x-admin.nav-link>
+        @endif
 
+        @if(auth()->user()->role === 1)
         <x-admin.nav-link
           href="{{ route('newsletter.index') }}"
           :active="request()->routeIs('newsletter.*')">
           Newsletter
         </x-admin.nav-link>
+        @endif
 
+        @if(auth()->user()->role === 1)
         <x-admin.nav-link
           href="{{ route('translations.index') }}"
           :active="request()->routeIs('translations.*')">
           Translations
         </x-admin.nav-link>
+        @endif
 
         <x-admin.nav-link
           href="/"

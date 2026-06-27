@@ -8,17 +8,40 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!auth()->check() || auth()->user()->role !== 1) {
-            abort(403, 'Unauthorized.');
+        if (!auth()->check()) {
+            return redirect()->route('login');
         }
 
-        return $next($request);
+        $user = auth()->user();
+
+        // 1. Admin (role 1) has access to all admin routes.
+        if ($user->role === 1) {
+            return $next($request);
+        }
+
+        // 2. Editor (role 2) has access to Dashboard, Articles, Categories, and Tags.
+        if ($user->role === 2) {
+            if ($request->is('admin') || 
+                $request->is('admin/articles*') || 
+                $request->is('admin/categories*') || 
+                $request->is('admin/tags*') ||
+                $request->is('admin/categories/search') ||
+                $request->is('admin/tags/search')) {
+                return $next($request);
+            }
+        }
+
+        // 3. Journalist (role 3) has access to Dashboard and Articles (read & write draft).
+        if ($user->role === 3) {
+            if ($request->is('admin') || 
+                $request->is('admin/articles*')) {
+                return $next($request);
+            }
+        }
+
+        // Default: block access for regular users (role 0) and any other unauthorized route
+        abort(403, 'Unauthorized.');
     }
 }

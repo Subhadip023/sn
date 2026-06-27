@@ -84,10 +84,15 @@
                     <h3 class="text-lg font-medium text-slate-900">Publish</h3>
                     <div class="space-y-1">
                         <label for="status" class="block text-sm font-medium text-slate-700">Status</label>
-                        <select name="status" id="status" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none">
-                            <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-                            <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
-                        </select>
+                        @if(auth()->user()->role === 3)
+                            <span class="block px-3 py-2 bg-slate-100 border border-slate-200 rounded-lg text-slate-600 text-sm">Draft (Pending Review)</span>
+                            <input type="hidden" name="status" value="draft">
+                        @else
+                            <select name="status" id="status" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none">
+                                <option value="draft" {{ old('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                                <option value="published" {{ old('status') == 'published' ? 'selected' : '' }}>Published</option>
+                            </select>
+                        @endif
                     </div>
 
                     <div class="space-y-1">

@@ -36,7 +36,10 @@ class ArticlesController extends Controller
     {
         $data = $request->validated();
 
-        // dd($data);
+        if (auth()->user()->role === 3) {
+            $data['status'] = 'draft';
+            $data['published_at'] = null;
+        }
         
         if (empty($data['slug'])) {
             $data['slug'] = \Illuminate\Support\Str::slug($data['title']);
@@ -108,6 +111,11 @@ class ArticlesController extends Controller
     public function update(UpdateArticlesRequest $request, Articles $article)
     {
         $data = $request->validated();
+
+        if (auth()->user()->role === 3) {
+            $data['status'] = 'draft';
+            $data['published_at'] = null;
+        }
         if (empty($data['slug'])) {
             $data['slug'] = \Illuminate\Support\Str::slug($data['title']);
         }

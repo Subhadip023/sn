@@ -33,6 +33,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the user's status.
+     */
+    protected function status(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn () => $this->email_verified_at ? 'Active' : 'Pending',
+        );
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>

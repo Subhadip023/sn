@@ -74,7 +74,7 @@
                 {{ session('error') }}
             </div>
           @endif
-          <form class="grid md:grid-cols-2 gap-4" id="inviteUser">
+          <form action="{{ route('admin.users.invite') }}" method="POST" class="grid md:grid-cols-2 gap-4" id="inviteUser">
             <label class="space-y-2">
               <span class="text-sm text-slate-700">Name</span>
               <input class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none" required name="name" placeholder="Full name" />

@@ -8,7 +8,7 @@ use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\NewsLatterController;
 use App\Http\Controllers\TranslationController;
 
-Route::middleware(['admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth','admin'])->prefix('admin')->group(function () {
     Route::post('pages/reorder', [PageController::class, 'reorder'])->name('pages.reorder');
     Route::resource('pages', PageController::class);
     Route::resource('categories', CategoryController::class);
@@ -64,8 +64,6 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
         return view('admin.content');
     })->name('admin.content');
 
-    Route::get('/users', function () {
-        $users = \App\Models\User::all();
-        return view('admin.users')->with('users', $users);
-    })->name('admin.users');
+    Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('admin.users');
+    Route::post('/users/invite', [App\Http\Controllers\UserController::class, 'invite'])->name('admin.users.invite');
 });
