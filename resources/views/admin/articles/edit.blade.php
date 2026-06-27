@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-semibold text-slate-900">Edit Article</h1>
     </header>
 
-    <form action="{{ route('articles.update', $article) }}" method="POST" enctype="multipart/form-data">
+    <form id="article-form" action="{{ route('articles.update', $article) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -260,10 +260,13 @@
             });
 
             // Copy HTML into hidden input before submit
-            var form = document.querySelector('form');
-            form.addEventListener('submit', function() {
-                var content = document.querySelector('#content');
-                if(content) content.value = quill.root.innerHTML;
+            var form = document.getElementById('article-form');
+            form.addEventListener('submit', function(e) {
+                var contentInput = document.getElementById('content');
+                var html = quill.root.innerHTML;
+                // Treat Quill's empty state as truly empty
+                if (html === '<p><br></p>') html = '';
+                if (contentInput) contentInput.value = html;
             });
 
             // Category Search Logic
