@@ -22,7 +22,42 @@ Route::middleware(['admin'])->prefix('admin')->group(function () {
     Route::post('tags/search', [TagController::class, 'search'])->name('tags.search');
 
     Route::get('/', function () {
-        return view('admin.dashboard');
+        $publishedCount = \App\Models\Articles::where('status', 'published')->count();
+        $publishedThisWeekCount = \App\Models\Articles::where('status', 'published')
+            ->where('published_at', '>=', now()->subDays(7))
+            ->count();
+        $draftsCount = \App\Models\Articles::where('status', 'draft')->count();
+        $scheduledCount = \App\Models\Articles::where('status', 'published')
+            ->where('published_at', '>', now())
+            ->count();
+        $editorsCount = \App\Models\User::where('role', 1)->count();
+
+        // Activity log from latest updated articles
+        $recentActivity = \App\Models\Articles::orderBy('updated_at', 'desc')->take(3)->get();
+
+        // Content queue
+        $contentQueue = \App\Models\Articles::with('category')->orderBy('updated_at', 'desc')->take(10)->get();
+
+        // Last 7 days views/engagement chart data
+        $days = collect(range(6, 0))->map(function($i) {
+            return now()->subDays($i);
+        });
+        $chartLabels = $days->map(fn($date) => $date->format('D'))->toArray();
+        $chartValues = $days->map(function($date) {
+            return (int) \App\Models\Articles::whereDate('published_at', $date->toDateString())->sum('views');
+        })->toArray();
+
+        return view('admin.dashboard', compact(
+            'publishedCount',
+            'publishedThisWeekCount',
+            'draftsCount',
+            'scheduledCount',
+            'editorsCount',
+            'recentActivity',
+            'contentQueue',
+            'chartLabels',
+            'chartValues'
+        ));
     })->name('admin.dashboard');
 
     Route::get('/content', function () {

@@ -39,7 +39,7 @@
                             <p class="text-gray-700 mb-4">
                                 {{ $top_story->excerpt }}
                             </p>
-                            <a href="{{ route('articles.show', $top_story->slug) }}" class="inline-flex items-center text-primary-red font-medium hover:underline">Read Full Story <i class="fas fa-arrow-right ml-2"></i></a>
+                            <a href="{{ route('show.article', $top_story->slug) }}" class="inline-flex items-center text-primary-red font-medium hover:underline">Read Full Story <i class="fas fa-arrow-right ml-2"></i></a>
                         </div>
                     </article>
                     @endif
@@ -61,7 +61,7 @@
                                     <span class="flex items-center"><i class="far fa-eye mr-1"></i> {{ $article->views ?? 0 }} Views</span>
                                 </div>
                                 <p class="text-sm text-gray-700 mb-3">{{ Str::limit($article->excerpt, 100) }}</p>
-                                <a href="{{ route('articles.show', $article->slug) }}" class="text-primary-red font-medium hover:underline text-sm">Read More</a>
+                                <a href="{{ route('show.article', $article->slug) }}" class="text-primary-red font-medium hover:underline text-sm">Read More</a>
                             </div>
                         </div>
                         @endforeach
@@ -86,7 +86,7 @@
                                     <img src="{{$post->featured_image_url}}" alt="Popular Post 1" class="w-20 h-15 object-cover rounded">
                                 </div>
                                 <div class="flex-1">
-                                    <h4 class="text-sm font-medium mb-1 hover:text-primary-red"><a href="{{route('articles.show', $post->slug)}}">{{$post->title}}</a></h4>
+                                    <h4 class="text-sm font-medium mb-1 hover:text-primary-red"><a href="{{route('show.article', $post->slug)}}">{{$post->title}}</a></h4>
                                     <span class="text-xs text-gray-600">{{ optional($post->created_at)->diffForHumans() ?? 'Just now' }}</span>
                                 </div>
                             </div>

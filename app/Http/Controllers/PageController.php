@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePageRequest;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Page;
+use App\Models\Articles;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -55,6 +56,50 @@ class PageController extends Controller
     public function show(Page $page)
     {
         //
+    }
+
+    /**
+     * Display the specified page for the frontend.
+     */
+    public function showPage($slug)
+    {
+        $page = Page::with('categories.articles', 'tags')->where('slug', $slug)->firstOrFail();
+        $pages = Page::where('active', true)->where('lang', app()->getLocale())->orderBy('position', 'asc')->get()->toArray();
+        $categoryIds = $page->categories->pluck('id');
+        $tagIds      = $page->tags->pluck('id');
+        $articles_query = Articles::where('status', 'published')
+            ->where('lang', app()->getLocale())
+            ->where(function ($q) use ($categoryIds, $tagIds) {
+
+            // from categories
+            if ($categoryIds->isNotEmpty()) {
+                $q->whereIn('category_id', $categoryIds);
+            }
+
+            // OR from tags
+            if ($tagIds->isNotEmpty()) {
+                $q->orWhereHas('tags', function ($t) use ($tagIds) {
+                    $t->whereIn('tags.id', $tagIds);
+                });
+            }
+        })
+            ->with(['category', 'tags', 'author'])
+            ->distinct()
+            ->latest();
+
+        $top_story = (clone $articles_query)->first();
+        $articles = $articles_query->when($top_story, function ($q) use ($top_story) {
+            return $q->where('id', '!=', $top_story->id);
+        })->paginate(6);
+
+        $most_populer_posts = Articles::where('status', 'published')->where('lang', app()->getLocale())->orderBy('views', 'desc')->take(3)->get();
+        
+        return view('page')
+            ->with('page', $page)
+            ->with('pages', $pages)
+            ->with('articles', $articles)
+            ->with('top_story', $top_story)
+            ->with('most_populer_posts', $most_populer_posts);
     }
 
     /**

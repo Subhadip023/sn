@@ -6,6 +6,7 @@ use App\Http\Requests\StoreArticlesRequest;
 use App\Http\Requests\UpdateArticlesRequest;
 use App\Models\Articles;
 use App\Models\ArticleTags;
+use App\Models\Page;
 
 class ArticlesController extends Controller
 {

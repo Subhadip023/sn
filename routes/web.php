@@ -4,70 +4,56 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Page;
 use App\Models\Articles;
-use App\Http\Controllers\NewsLatterController;
+use App\Http\Controllers\{NewsLatterController,HomePageController,ArticlesController,PageController,UserArticleController};
 
-Route::get('/', function () {
-    $pages = Page::where('active', true)->where('lang', app()->getLocale())->orderBy('position', 'asc')->get()->toArray();
-    $articles = Articles::where('status', 'published')
-        ->where('lang', app()->getLocale())
-        ->orderBy('created_at', 'desc')
-        ->get();
+Route::get('/', HomePageController::class);
 
-    $top_story = $articles->first();
-    // Slice enough articles to allow for skipping 3 and taking 10, plus the top story.
-    // If top_story is the first, then we need 3 + 10 = 13 more articles.
-    // So, slice from index 1 (after top_story) and take 13.
-    $latest_articles = $articles->slice(1, 13);
-    return view('welcome')
-        ->with('pages', $pages)
-        ->with('articles', $articles)
-        ->with('top_story', $top_story)
-        ->with('latest_articles', $latest_articles);
-});
+Route::get('/article/{slug}', [UserArticleController::class, 'show'])->name('show.article');
 
-Route::get('/article/{slug}', function ($slug) {
-    $article = Articles::with(['category', 'author', 'tags'])->where('slug', $slug)->firstOrFail();
-    $pages = Page::where('active', true)->where('lang', app()->getLocale())->orderBy('position', 'asc')->get()->toArray();
-    $latest_articles = Articles::where('status', 'published')->where('lang', app()->getLocale())->where('id', '!=', $article->id)->orderBy('created_at', 'desc')->take(5)->get();
+Route::get('/page/{slug}', [PageController::class, 'showPage'])->name('page.show');
 
-    return view('admin.articles.show')->with('article', $article)->with('pages', $pages)->with('latest_articles', $latest_articles);
-})->name('article.show');
-
-Route::get('/page/{slug}', function ($slug) {
-    $page = Page::with('categories.articles', 'tags')->where('slug', $slug)->first();
-    $pages = Page::where('active', true)->where('lang', app()->getLocale())->orderBy('position', 'asc')->get()->toArray();
-    $categoryIds = $page->categories->pluck('id');
-    $tagIds      = $page->tags->pluck('id');
-    $articles_query = Articles::where('status', 'published')
-        ->where('lang', app()->getLocale())
-        ->where(function ($q) use ($categoryIds, $tagIds) {
-
-        // from categories
-        if ($categoryIds->isNotEmpty()) {
-            $q->whereIn('category_id', $categoryIds);
-        }
-
-        // OR from tags
-        if ($tagIds->isNotEmpty()) {
-            $q->orWhereHas('tags', function ($t) use ($tagIds) {
-                $t->whereIn('tags.id', $tagIds);
-            });
-        }
-    })
-        ->with(['category', 'tags', 'author'])
-        ->distinct()
-        ->latest();
-
-    $top_story = (clone $articles_query)->first();
-    $articles = $articles_query->when($top_story, function ($q) use ($top_story) {
-        return $q->where('id', '!=', $top_story->id);
-    })->paginate(6);
-
-    $most_populer_posts = Articles::where('status', 'published')->where('lang', app()->getLocale())->orderBy('views', 'desc')->take(3)->get();
-    return view('page')->with('page', $page)->with('pages', $pages)->with('articles', $articles)->with('top_story', $top_story)->with('most_populer_posts', $most_populer_posts);
-});
 
 Route::get('/dashboard', function () {
+    $user_role = auth()->user()->role;
+    if ($user_role == 0) {
+        $publishedCount = \App\Models\Articles::where('status', 'published')->count();
+        $publishedThisWeekCount = \App\Models\Articles::where('status', 'published')
+            ->where('published_at', '>=', now()->subDays(7))
+            ->count();
+        $draftsCount = \App\Models\Articles::where('status', 'draft')->count();
+        $scheduledCount = \App\Models\Articles::where('status', 'published')
+            ->where('published_at', '>', now())
+            ->count();
+        $editorsCount = \App\Models\User::where('role', 1)->count();
+
+        // Activity log from latest updated articles
+        $recentActivity = \App\Models\Articles::orderBy('updated_at', 'desc')->take(3)->get();
+
+        // Content queue
+        $contentQueue = \App\Models\Articles::with('category')->orderBy('updated_at', 'desc')->take(10)->get();
+
+        // Last 7 days views/engagement chart data
+        $days = collect(range(6, 0))->map(function($i) {
+            return now()->subDays($i);
+        });
+        $chartLabels = $days->map(fn($date) => $date->format('D'))->toArray();
+        $chartValues = $days->map(function($date) {
+            return (int) \App\Models\Articles::whereDate('published_at', $date->toDateString())->sum('views');
+        })->toArray();
+
+        return view('dashboard', compact(
+            'publishedCount',
+            'publishedThisWeekCount',
+            'draftsCount',
+            'scheduledCount',
+            'editorsCount',
+            'recentActivity',
+            'contentQueue',
+            'chartLabels',
+            'chartValues'
+        ));
+    }
+    
     return redirect()->route('admin.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 

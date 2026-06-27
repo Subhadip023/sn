@@ -4,13 +4,16 @@ function initEngagementChart() {
     if (!ctx) return;
 
     // Chart is available globally via CDN
+    const labels = JSON.parse(ctx.getAttribute('data-labels') || '["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]');
+    const data = JSON.parse(ctx.getAttribute('data-values') || '[65, 59, 80, 81, 56, 55, 40]');
+
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            labels: labels,
             datasets: [{
-                label: 'Sessions',
-                data: [65, 59, 80, 81, 56, 55, 40],
+                label: 'Views',
+                data: data,
                 fill: true,
                 borderColor: 'rgb(81, 100, 255)', // brand-500
                 backgroundColor: 'rgba(81, 100, 255, 0.1)',
