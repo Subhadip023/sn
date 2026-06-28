@@ -81,6 +81,8 @@ class TranslationController extends Controller
             ['value' => $validated['value_bn']]
         );
 
+        Translation::clearCache();
+
         return redirect()->route('translations.index')->with('success', 'Translation added successfully.');
     }
 
@@ -124,6 +126,8 @@ class TranslationController extends Controller
             'value' => $validated['value_bn']
         ]);
 
+        Translation::clearCache();
+
         return redirect()->route('translations.index')->with('success', 'Translation updated successfully.');
     }
 
@@ -133,6 +137,8 @@ class TranslationController extends Controller
     public function destroy(Translation $translation)
     {
         Translation::where('key', $translation->key)->delete();
+
+        Translation::clearCache();
 
         return redirect()->route('translations.index')->with('success', 'Translation deleted successfully.');
     }

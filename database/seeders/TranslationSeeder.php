@@ -33,5 +33,7 @@ class TranslationSeeder extends Seeder
                 }
             }
         }
+
+        Translation::clearCache();
     }
 }

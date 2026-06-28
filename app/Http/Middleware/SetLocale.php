@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Translation;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Cache;
 
 class SetLocale
 {
@@ -23,8 +24,19 @@ class SetLocale
 
         try {
             if (Schema::hasTable('translations')) {
-                $translations = Translation::where('locale', $locale)->pluck('value', 'key')->toArray();
-                Lang::addLines($translations, $locale);
+                $translations = Cache::rememberForever("translations_{$locale}", function () use ($locale) {
+                    return Translation::where('locale', $locale)->pluck('value', 'key')->toArray();
+                });
+                
+                $translator = app('translator');
+                $translator->load('*', '*', $locale);
+
+                $setJsonTranslations = function ($locale, $translations) {
+                    foreach ($translations as $key => $value) {
+                        $this->loaded['*']['*'][$locale][$key] = $value;
+                    }
+                };
+                \Closure::bind($setJsonTranslations, $translator, $translator)($locale, $translations);
             }
         } catch (\Exception $e) {
             // Silently fall back if DB is not set up yet
