@@ -42,7 +42,7 @@
                     <label for="lang" class="block text-sm font-medium text-slate-700">Language <span class="text-rose-500">*</span></label>
                     <select name="lang" id="lang" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none" required>
                         @foreach(languages() as $code => $name)
-                            <option value="{{ $code }}" {{ old('lang') == $code || (!old('lang') && $code === 'en') ? 'selected' : '' }}>{{ $name }}</option>
+                            <option value="{{ $code }}" {{ old('lang') == $code || (!old('lang') && $code === setting('default_language', 'en')) ? 'selected' : '' }}>{{ $name }}</option>
                         @endforeach
                     </select>
                     @error('lang')
@@ -58,9 +58,21 @@
 
         <!-- Category List -->
         <section class="lg:col-span-2 rounded-xl border border-slate-200 bg-white p-5 space-y-4 shadow-sm">
-            <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold text-slate-900">All Categories</h2>
-                <span class="text-sm text-slate-500">{{ $categories->total() }} categories</span>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
+                <div>
+                    <h2 class="text-lg font-semibold text-slate-900">All Categories</h2>
+                    <span class="text-sm text-slate-500">{{ $categories->total() }} categories</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <label for="filter_lang" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Language:</label>
+                    <select id="filter_lang" onchange="window.location.href = '{{ route('categories.index') }}?lang=' + this.value" 
+                            class="rounded-lg border border-slate-300 bg-white px-6 py-1.5 text-xs text-slate-700 focus:border-brand-500 focus:outline-none font-medium w-fit cursor-pointer">
+                        <option value="all" {{ $selectedLang === 'all' ? 'selected' : '' }}>All Languages</option>
+                        @foreach(languages() as $code => $name)
+                            <option value="{{ $code }}" {{ $selectedLang === $code ? 'selected' : '' }}>{{ $name }} ({{ strtoupper($code) }})</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">

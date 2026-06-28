@@ -6,6 +6,7 @@ use App\Http\Requests\StoreArticlesRequest;
 use App\Http\Requests\UpdateArticlesRequest;
 use App\Models\Articles;
 use App\Models\ArticleTags;
+use App\Models\ManualAuthor;
 use App\Models\Page;
 
 class ArticlesController extends Controller
@@ -26,7 +27,8 @@ class ArticlesController extends Controller
     {
         $categories = \App\Models\Category::all();
         $tags = \App\Models\Tag::all();
-        return view('admin.articles.create', compact('categories', 'tags'));
+        $manualAuthors = ManualAuthor::active()->orderBy('name')->get();
+        return view('admin.articles.form', compact('categories', 'tags', 'manualAuthors'));
     }
 
     /**
@@ -50,6 +52,11 @@ class ArticlesController extends Controller
         if ($request->hasFile('featured_image')) {
             $path = $request->file('featured_image')->store('articles', 'public');
             $data['featured_image'] = $path;
+        }
+
+        // Treat empty manual_author_id as null
+        if (isset($data['manual_author_id']) && $data['manual_author_id'] === '') {
+            $data['manual_author_id'] = null;
         }
 
         if ($data['status'] === 'published' && empty($data['published_at'])) {
@@ -101,8 +108,9 @@ class ArticlesController extends Controller
     {
         $categories = \App\Models\Category::all();
         $tags = \App\Models\Tag::all();
+        $manualAuthors = ManualAuthor::active()->orderBy('name')->get();
         $article->load('tags');
-        return view('admin.articles.edit', compact('article', 'categories', 'tags'));
+        return view('admin.articles.form', compact('article', 'categories', 'tags', 'manualAuthors'));
     }
 
     /**
@@ -123,6 +131,11 @@ class ArticlesController extends Controller
         if ($request->hasFile('featured_image')) {
             $path = $request->file('featured_image')->store('articles', 'public');
             $data['featured_image'] = $path;
+        }
+
+        // Treat empty manual_author_id as null
+        if (isset($data['manual_author_id']) && $data['manual_author_id'] === '') {
+            $data['manual_author_id'] = null;
         }
 
         if ($data['status'] === 'published' && empty($data['published_at'])) {

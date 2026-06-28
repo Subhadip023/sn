@@ -30,6 +30,7 @@ class Articles extends Model
         'published_at',
         'views',
         'lang',
+        'manual_author_id',
     ];
 
     protected $casts = [
@@ -44,6 +45,11 @@ class Articles extends Model
     public function author()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function manualAuthor()
+    {
+        return $this->belongsTo(ManualAuthor::class, 'manual_author_id');
     }
 
    public function tags()

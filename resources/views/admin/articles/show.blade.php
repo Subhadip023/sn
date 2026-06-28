@@ -5,12 +5,15 @@
                 <h1 class="text-4xl md:text-5xl font-semibold mb-4 leading-tight text-gray-800" @if(app()->getLocale()=='bn') style='line-height:1.3' @endif >{{ $article->title }}</h1>
                 <div class="flex flex-wrap items-center gap-5 text-sm text-gray-500 mb-5 pb-4 border-b border-gray-200">
                     <span class="flex items-center gap-1.5">
-                        @if($article->author->profile_image)
+                        @php $displayAuthor = $article->manualAuthor ?? $article->author; @endphp
+                        @if($article->manualAuthor?->display_image)
+                            <img src="{{ $article->manualAuthor->display_image }}" alt="{{ $article->manualAuthor->name }}" class="w-5 h-5 rounded-full object-cover border border-gray-300 shrink-0">
+                        @elseif(!$article->manualAuthor && $article->author->profile_image)
                             <img src="{{ asset('storage/' . $article->author->profile_image) }}" alt="{{ $article->author->name }}" class="w-5 h-5 rounded-full object-cover border border-gray-300 shrink-0">
                         @else
-                            <span class="w-5 h-5 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center text-xs font-bold uppercase shrink-0">{{ substr($article->author->name, 0, 1) }}</span>
+                            <span class="w-5 h-5 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center text-xs font-bold uppercase shrink-0">{{ substr($displayAuthor->name, 0, 1) }}</span>
                         @endif
-                        {{ $article->author->name }}
+                        {{ $displayAuthor->name }}
                     </span>
                     <span class="flex items-center"><i class="far fa-calendar-alt mr-1.5"></i> {{ ($article->published_at ?? $article->created_at)->format('M d, Y') }}</span>
                     <span class="flex items-center"><i class="far fa-clock mr-1.5"></i>{{
@@ -76,18 +79,38 @@
             </div>
             
             <div class="flex items-center bg-gray-100 p-5 rounded-lg my-8">
-                @if($article->author->profile_image)
-                    <img src="{{ asset('storage/' . $article->author->profile_image) }}" alt="{{ $article->author->name }}" class="w-20 h-20 rounded-full mr-5 object-cover border border-gray-200 shrink-0">
+                @php $bio = $article->manualAuthor; @endphp
+                @if($bio)
+                    {{-- Manual Author Bio --}}
+                    @if($bio->display_image)
+                        <img src="{{ $bio->display_image }}" alt="{{ $bio->name }}" class="w-20 h-20 rounded-full mr-5 object-cover border border-gray-200 shrink-0">
+                    @else
+                        <div class="w-20 h-20 rounded-full mr-5 bg-gray-200 text-gray-700 flex items-center justify-center font-bold text-2xl uppercase border border-gray-300 shrink-0">
+                            {{ substr($bio->name, 0, 1) }}
+                        </div>
+                    @endif
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 mb-1">{{ $bio->name }}</h4>
+                        @if($bio->position)
+                            <span class="text-sm text-gray-600 block mb-2.5 capitalize">{{ $bio->position }}</span>
+                        @endif
+                        <p class="text-sm text-gray-600 leading-relaxed">{{ $bio->description ?: 'No biography available.' }}</p>
+                    </div>
                 @else
-                    <div class="w-20 h-20 rounded-full mr-5 bg-gray-200 text-gray-700 flex items-center justify-center font-bold text-2xl uppercase border border-gray-300 shrink-0">
-                        {{ substr($article->author->name, 0, 1) }}
+                    {{-- Fallback: system author --}}
+                    @if($article->author->profile_image)
+                        <img src="{{ asset('storage/' . $article->author->profile_image) }}" alt="{{ $article->author->name }}" class="w-20 h-20 rounded-full mr-5 object-cover border border-gray-200 shrink-0">
+                    @else
+                        <div class="w-20 h-20 rounded-full mr-5 bg-gray-200 text-gray-700 flex items-center justify-center font-bold text-2xl uppercase border border-gray-300 shrink-0">
+                            {{ substr($article->author->name, 0, 1) }}
+                        </div>
+                    @endif
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 mb-1">{{ $article->author->name }}</h4>
+                        <span class="text-sm text-gray-600 block mb-2.5 capitalize">{{ $article->author->position ?: (all_roles()[$article->author->role] ?? 'Author') }}</span>
+                        <p class="text-sm text-gray-600 leading-relaxed">{{ $article->author->short_desc ?: 'This author has not provided a short description yet.' }}</p>
                     </div>
                 @endif
-                <div>
-                    <h4 class="text-lg font-semibold text-gray-800 mb-1">{{ $article->author->name }}</h4>
-                    <span class="text-sm text-gray-600 block mb-2.5 capitalize">{{ $article->author->position ?: (all_roles()[$article->author->role] ?? 'Author') }}</span>
-                    <p class="text-sm text-gray-600 leading-relaxed">{{ $article->author->short_desc ?: 'This author has not provided a short description yet.' }}</p>
-                </div>
             </div>
             
             <div class="mt-12">

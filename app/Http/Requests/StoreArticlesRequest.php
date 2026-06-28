@@ -37,6 +37,7 @@ class StoreArticlesRequest extends FormRequest
             'meta_keywords' => 'nullable|string',
             'canonical_url' => 'nullable|url',
             'lang' => 'required|string|in:' . implode(',', array_keys(languages())),
+            'manual_author_id' => 'nullable|exists:manual_authors,id',
         ];
     }
 }

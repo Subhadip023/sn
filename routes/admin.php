@@ -8,6 +8,7 @@ use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\NewsLatterController;
 use App\Http\Controllers\TranslationController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ManualAuthorController;
 
 Route::middleware(['auth','admin'])->prefix('admin')->group(function () {
     Route::post('page/reorder', [PageController::class, 'reorder'])->name('pages.reorder');
@@ -15,6 +16,7 @@ Route::middleware(['auth','admin'])->prefix('admin')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('tags', TagController::class);
     Route::resource('articles', ArticlesController::class);
+    Route::resource('manual-authors', ManualAuthorController::class);
     Route::resource('newsletter', NewsLatterController::class);
     Route::resource('translations', TranslationController::class);
     Route::get('page/settings/{page}', [PageController::class, 'settings'])->name('page.settings');

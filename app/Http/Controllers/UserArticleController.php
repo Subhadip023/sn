@@ -13,7 +13,7 @@ class UserArticleController extends Controller
      */
     public function show($slug)
     {
-        $article = Articles::with(['category', 'author', 'tags'])->where('slug', $slug)->firstOrFail();
+        $article = Articles::with(['category', 'author', 'tags', 'manualAuthor'])->where('slug', $slug)->firstOrFail();
         
         // Increment the view count on every view
         if(!auth()->check() || (!auth()->user() && $article->author_id != auth()->user()->id)){

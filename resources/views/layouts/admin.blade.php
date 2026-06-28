@@ -166,7 +166,7 @@
 
         <x-admin.nav-dropdown
           title="Content"
-          :active="request()->routeIs('articles.*') || request()->routeIs('categories.*') || request()->routeIs('tags.*')">
+          :active="request()->routeIs('articles.*') || request()->routeIs('categories.*') || request()->routeIs('tags.*') || request()->routeIs('manual-authors.*')">
 
           <x-admin.nav-sub-link
             href="{{ route('articles.index') }}"
@@ -175,14 +175,18 @@
           </x-admin.nav-sub-link>
 
           @if(auth()->user()->role === 1 || auth()->user()->role === 2)
-          <x-admin.nav-sub-link href="{{route('categories.index')}}">
+          <x-admin.nav-sub-link href="{{route('categories.index')}}" :active="request()->routeIs('categories.index')">
             Categories
           </x-admin.nav-sub-link>
 
-          <x-admin.nav-sub-link href="{{route('tags.index')}}">
+          <x-admin.nav-sub-link href="{{route('tags.index')}}" :active="request()->routeIs('tags.index')">
             Tags
           </x-admin.nav-sub-link>
           @endif
+
+          <x-admin.nav-sub-link href="{{route('manual-authors.index')}}" :active="request()->routeIs('manual-authors.*')">
+            Manual Authors
+          </x-admin.nav-sub-link>
 
         </x-admin.nav-dropdown>
 

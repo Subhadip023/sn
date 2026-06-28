@@ -11,10 +11,20 @@ class TagController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tags = Tag::latest()->get();
-        return view('admin.tags.index', compact('tags'));
+        $defaultLang = setting('default_language', 'en');
+        $selectedLang = $request->query('lang', $defaultLang);
+
+        $query = Tag::latest();
+
+        if ($selectedLang !== 'all') {
+            $query->where('lang', $selectedLang);
+        }
+
+        $tags = $query->get();
+
+        return view('admin.tags.index', compact('tags', 'selectedLang'));
     }
 
     /**

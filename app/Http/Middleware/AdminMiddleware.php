@@ -21,22 +21,24 @@ class AdminMiddleware
             return $next($request);
         }
 
-        // 2. Editor (role 2) has access to Dashboard, Articles, Categories, and Tags.
+        // 2. Editor (role 2) has access to Dashboard, Articles, Categories, Tags, and Manual Authors.
         if ($user->role === 2) {
             if ($request->is('admin') || 
                 $request->is('admin/articles*') || 
                 $request->is('admin/categories*') || 
                 $request->is('admin/tags*') ||
+                $request->is('admin/manual-authors*') ||
                 $request->is('admin/categories/search') ||
                 $request->is('admin/tags/search')) {
                 return $next($request);
             }
         }
 
-        // 3. Journalist (role 3) has access to Dashboard and Articles (read & write draft).
+        // 3. Journalist (role 3) has access to Dashboard, Articles, and Manual Authors.
         if ($user->role === 3) {
             if ($request->is('admin') || 
-                $request->is('admin/articles*')) {
+                $request->is('admin/articles*') ||
+                $request->is('admin/manual-authors*')) {
                 return $next($request);
             }
         }

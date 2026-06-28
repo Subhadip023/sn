@@ -12,10 +12,20 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::latest()->paginate(10);
-        return view('admin.categories.index', compact('categories'));
+        $defaultLang = setting('default_language', 'en');
+        $selectedLang = $request->query('lang', $defaultLang);
+
+        $query = Category::latest();
+
+        if ($selectedLang !== 'all') {
+            $query->where('lang', $selectedLang);
+        }
+
+        $categories = $query->paginate(10)->withQueryString();
+
+        return view('admin.categories.index', compact('categories', 'selectedLang'));
     }
 
     /**
