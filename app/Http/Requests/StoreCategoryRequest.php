@@ -25,7 +25,7 @@ class StoreCategoryRequest extends FormRequest
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:categories,slug',
             'active' => 'boolean',
-            'lang' => 'required|string|max:10',
+            'lang' => 'required|string|in:' . implode(',', array_keys(languages())),
         ];
     }
 }

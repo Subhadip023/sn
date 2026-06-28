@@ -74,7 +74,7 @@ require __DIR__ . '/admin.php';
 require __DIR__ . '/auth.php';
 
 Route::get('/lang/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'bn'])) {
+    if (array_key_exists($locale, languages())) {
         session()->put('locale', $locale);
     }
     return redirect()->back();

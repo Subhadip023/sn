@@ -39,8 +39,9 @@
                 <thead class="text-slate-500 border-b border-slate-100">
                     <tr class="text-left">
                         <th class="py-2.5 font-medium w-1/3">Translation Key</th>
-                        <th class="py-2.5 font-medium">Translation Value (en)</th>
-                        <th class="py-2.5 font-medium">Translation Value (bn)</th>
+                        @foreach(languages() as $code => $name)
+                            <th class="py-2.5 font-medium">Translation Value ({{ $code }})</th>
+                        @endforeach
                         <th class="py-2.5 font-medium w-24 text-right">Actions</th>
                     </tr>
                 </thead>
@@ -48,8 +49,9 @@
                     @forelse ($translations as $translation)
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="py-3 font-mono text-slate-800 break-all pr-4">{{ $translation->key }}</td>
-                        <td class="py-3 text-slate-600 break-all pr-4">{{ $translation->en_value }}</td>
-                        <td class="py-3 text-slate-600 break-all pr-4">{{ $translation->bn_value }}</td>
+                        @foreach(languages() as $code => $name)
+                            <td class="py-3 text-slate-600 break-all pr-4">{{ $translation->values[$code] ?? '' }}</td>
+                        @endforeach
                         <td class="py-3 text-right space-x-2">
                             <a href="{{ route('translations.edit', $translation->id) }}" class="text-amber-500 hover:text-amber-600 inline-block" title="Edit">
                                 <i class="fas fa-edit"></i>
@@ -65,7 +67,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td class="py-6 text-slate-400 text-center" colspan="4">No translations found.</td>
+                        <td class="py-6 text-slate-400 text-center" colspan="{{ count(languages()) + 2 }}">No translations found.</td>
                     </tr>
                     @endforelse
                 </tbody>

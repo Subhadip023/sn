@@ -191,11 +191,13 @@
           title="Pages"
           :active="request()->routeIs('pages.*')">
 
-          <x-admin.nav-sub-link
-            href="{{ route('pages.index') }}"
-            :active="request()->routeIs('pages.index')">
-            All Pages
-          </x-admin.nav-sub-link>
+          @foreach(languages() as $key => $value)
+            <x-admin.nav-sub-link
+              href="{{ route('pages.index', ['lang' => $key]) }}"
+              :active="request()->routeIs('pages.index') && request('lang') == $key">
+              Pages ({{strtoupper($value)}})
+            </x-admin.nav-sub-link>
+          @endforeach
 
         </x-admin.nav-dropdown>
         @endif

@@ -26,7 +26,7 @@ class StorePageRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', 'unique:'.Page::class],
             'active' => ['required', 'boolean'],
-            'lang' => ['required', 'string', 'max:10'],
+            'lang' => ['required', 'string', 'in:' . implode(',', array_keys(languages()))],
         ];
     }
 }

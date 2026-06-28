@@ -172,8 +172,9 @@
             </div>
             <div class="flex items-center gap-4">
                 <div class="flex gap-1 mr-2 border border-gray-300 rounded px-1 py-0.5 bg-white">
-                    <a href="{{ route('lang.switch', 'en') }}" class="px-1.5 py-0.5 rounded text-xs {{ app()->getLocale() == 'en' ? 'bg-primary-red text-white' : 'text-gray-600 hover:text-primary-red' }} font-bold transition-all">EN</a>
-                    <a href="{{ route('lang.switch', 'bn') }}" class="px-1.5 py-0.5 rounded text-xs {{ app()->getLocale() == 'bn' ? 'bg-primary-red text-white' : 'text-gray-600 hover:text-primary-red' }} font-bold transition-all">BN</a>
+                    @foreach(languages() as $code => $name)
+                        <a href="{{ route('lang.switch', $code) }}" class="px-1.5 py-0.5 rounded text-xs {{ app()->getLocale() == $code ? 'bg-primary-red text-white' : 'text-gray-600 hover:text-primary-red' }} font-bold uppercase transition-all">{{ $code }}</a>
+                    @endforeach
                 </div>
                 @auth
                 <a href="{{ route('dashboard') }}">

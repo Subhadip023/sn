@@ -31,17 +31,21 @@ class TranslationController extends Controller
 
         $items = $paginatedKeys->map(function ($item) use ($translationsGrouped) {
             $group = $translationsGrouped->get($item->key);
-            $en = $group ? $group->firstWhere('locale', 'en') : null;
-            $bn = $group ? $group->firstWhere('locale', 'bn') : null;
             
+            $values = [];
+            $firstId = null;
+            foreach (languages() as $code => $name) {
+                $localeTranslation = $group ? $group->firstWhere('locale', $code) : null;
+                $values[$code] = $localeTranslation ? $localeTranslation->value : '';
+                if ($localeTranslation && !$firstId) {
+                    $firstId = $localeTranslation->id;
+                }
+            }
+
             return (object)[
                 'key' => $item->key,
-                'en_value' => $en ? $en->value : '',
-                'bn_value' => $bn ? $bn->value : '',
-                'en_id' => $en ? $en->id : null,
-                'bn_id' => $bn ? $bn->id : null,
-                // Fallback ID to pass to route helpers
-                'id' => ($en ? $en->id : ($bn ? $bn->id : null))
+                'values' => $values,
+                'id' => $firstId ?? ($group && $group->first() ? $group->first()->id : null)
             ];
         });
 
@@ -65,21 +69,21 @@ class TranslationController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'key' => 'required|string',
-            'value_en' => 'required|string',
-            'value_bn' => 'required|string',
-        ]);
+        ];
+        foreach (languages() as $code => $name) {
+            $rules['values.' . $code] = 'required|string';
+        }
 
-        Translation::updateOrCreate(
-            ['key' => $validated['key'], 'locale' => 'en'],
-            ['value' => $validated['value_en']]
-        );
+        $validated = $request->validate($rules);
 
-        Translation::updateOrCreate(
-            ['key' => $validated['key'], 'locale' => 'bn'],
-            ['value' => $validated['value_bn']]
-        );
+        foreach (languages() as $code => $name) {
+            Translation::updateOrCreate(
+                ['key' => $validated['key'], 'locale' => $code],
+                ['value' => $validated['values'][$code]]
+            );
+        }
 
         Translation::clearCache();
 
@@ -92,10 +96,15 @@ class TranslationController extends Controller
     public function edit(Translation $translation)
     {
         $key = $translation->key;
-        $en = Translation::where('key', $key)->where('locale', 'en')->first();
-        $bn = Translation::where('key', $key)->where('locale', 'bn')->first();
+        $translations = Translation::where('key', $key)->get();
+        
+        $values = [];
+        foreach (languages() as $code => $name) {
+            $t = $translations->firstWhere('locale', $code);
+            $values[$code] = $t ? $t->value : '';
+        }
 
-        return view('admin.translations.edit', compact('key', 'en', 'bn', 'translation'));
+        return view('admin.translations.edit', compact('key', 'values', 'translation'));
     }
 
     /**
@@ -103,28 +112,27 @@ class TranslationController extends Controller
      */
     public function update(Request $request, Translation $translation)
     {
-        $validated = $request->validate([
+        $rules = [
             'key' => 'required|string',
-            'value_en' => 'required|string',
-            'value_bn' => 'required|string',
-        ]);
+        ];
+        foreach (languages() as $code => $name) {
+            $rules['values.' . $code] = 'required|string';
+        }
+
+        $validated = $request->validate($rules);
 
         $originalKey = $translation->key;
 
         // Clean up or re-create
         Translation::where('key', $originalKey)->delete();
 
-        Translation::create([
-            'key' => $validated['key'],
-            'locale' => 'en',
-            'value' => $validated['value_en']
-        ]);
-
-        Translation::create([
-            'key' => $validated['key'],
-            'locale' => 'bn',
-            'value' => $validated['value_bn']
-        ]);
+        foreach (languages() as $code => $name) {
+            Translation::create([
+                'key' => $validated['key'],
+                'locale' => $code,
+                'value' => $validated['values'][$code]
+            ]);
+        }
 
         Translation::clearCache();
 

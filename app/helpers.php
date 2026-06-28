@@ -18,3 +18,13 @@ if (!function_exists('setting')) {
         return \App\Models\Setting::get($key, $default);
     }
 }
+
+if (!function_exists('languages')) {
+    function languages()
+    {
+        return [
+            'en' => 'English',
+            'bn' => 'Bengali',
+        ];
+    }
+}

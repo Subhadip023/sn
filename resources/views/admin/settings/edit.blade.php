@@ -22,8 +22,9 @@
                     <div class="space-y-1">
                         <label for="default_language" class="block text-sm font-medium text-slate-700">Default Language <span class="text-rose-500">*</span></label>
                         <select name="default_language" id="default_language" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none">
-                            <option value="en" {{ old('default_language', setting('default_language', 'en')) == 'en' ? 'selected' : '' }}>English</option>
-                            <option value="bn" {{ old('default_language', setting('default_language', 'en')) == 'bn' ? 'selected' : '' }}>Bengali</option>
+                            @foreach(languages() as $code => $name)
+                                <option value="{{ $code }}" {{ old('default_language', setting('default_language', 'en')) == $code ? 'selected' : '' }}>{{ $name }}</option>
+                            @endforeach
                         </select>
                         @error('default_language') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
                     </div>

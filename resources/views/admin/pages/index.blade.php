@@ -90,8 +90,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="flex justify-end pt-4" id="saveOrderBtn" style="display: none;">
-            <button type="submit" class="px-6 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold transition-all shadow-sm active:scale-95">
+        <div class="flex justify-end pt-4" id="saveOrderContainer" style="display: none;">
+            <button type="button" id="saveOrderBtn" class="px-6 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold transition-all shadow-sm active:scale-95">
                 Save Order
             </button>
         </div>
@@ -103,7 +103,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const el = document.getElementById('sortable-pages');
-            const saveBtn = document.getElementById('saveOrderBtn');
+            const saveContainer = document.getElementById('saveOrderContainer');
             
             if (el) {
                 const sortable = Sortable.create(el, {
@@ -112,7 +112,7 @@
                     ghostClass: 'bg-slate-50',
                     onEnd: function() {
                         updatePositions();
-                        saveBtn.style.display = 'flex';
+                        saveContainer.style.display = 'flex';
                     }
                 });
             }
@@ -123,6 +123,37 @@
                     const position = index + 1;
                     row.querySelector('.position-text').textContent = position;
                     row.querySelector('.position-input').value = position;
+                });
+            }
+
+            const saveBtn = document.getElementById('saveOrderBtn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function() {
+                    const formData = new FormData();
+                    const inputs = document.querySelectorAll('.position-input');
+                    inputs.forEach(input => {
+                        formData.append(input.name, input.value);
+                    });
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', '{{ route("pages.reorder") }}');
+                    xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                    xhr.setRequestHeader('Accept', 'application/json');
+                    xhr.onload = function() {
+                        let response = {};
+                        try {
+                            response = JSON.parse(xhr.responseText);
+                        } catch (e) {}
+
+                        if (xhr.status === 200) {
+                            alert(response.message || 'Order saved successfully');
+                            saveContainer.style.display = 'none';
+                        } else {
+                            alert(response.message || 'Failed to save order');
+                        }
+                    };
+                    xhr.send(formData);
                 });
             }
         });

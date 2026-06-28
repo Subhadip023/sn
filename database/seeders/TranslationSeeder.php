@@ -16,7 +16,7 @@ class TranslationSeeder extends Seeder
         // Clear existing translations first to avoid duplicates
         Translation::truncate();
 
-        $locales = ['en', 'bn'];
+        $locales = array_keys(languages());
 
         foreach ($locales as $locale) {
             $path = base_path("lang/{$locale}.json");

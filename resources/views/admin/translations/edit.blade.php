@@ -18,21 +18,15 @@
                     @enderror
                 </div>
 
+                @foreach(languages() as $code => $name)
                 <div class="space-y-1">
-                    <label for="value_en" class="block text-sm font-medium text-slate-700">Translation Value (English) <span class="text-rose-500">*</span></label>
-                    <textarea name="value_en" id="value_en" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none" placeholder="e.g. Home" required>{{ old('value_en', $en ? $en->value : '') }}</textarea>
-                    @error('value_en')
+                    <label for="value_{{ $code }}" class="block text-sm font-medium text-slate-700">Translation Value ({{ $name }}) <span class="text-rose-500">*</span></label>
+                    <textarea name="values[{{ $code }}]" id="value_{{ $code }}" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none" placeholder="e.g. {{ $code == 'en' ? 'Home' : 'প্রচ্ছদ' }}" required>{{ old('values.' . $code, $values[$code] ?? '') }}</textarea>
+                    @error('values.' . $code)
                         <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-
-                <div class="space-y-1">
-                    <label for="value_bn" class="block text-sm font-medium text-slate-700">Translation Value (Bengali) <span class="text-rose-500">*</span></label>
-                    <textarea name="value_bn" id="value_bn" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none" placeholder="e.g. প্রচ্ছদ" required>{{ old('value_bn', $bn ? $bn->value : '') }}</textarea>
-                    @error('value_bn')
-                        <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
+                @endforeach
 
                 <div class="pt-4 border-t border-slate-100 flex gap-3">
                     <button type="submit" class="px-4 py-2 rounded-lg bg-brand-500 hover:bg-brand-400 text-white font-semibold">Update Translation</button>

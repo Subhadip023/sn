@@ -28,8 +28,9 @@ class Translation extends Model
                 Cache::forget("translations_{$locale}");
             }
         } catch (\Exception $e) {
-            Cache::forget("translations_en");
-            Cache::forget("translations_bn");
+            foreach (array_keys(languages()) as $locale) {
+                Cache::forget("translations_{$locale}");
+            }
         }
     }
 

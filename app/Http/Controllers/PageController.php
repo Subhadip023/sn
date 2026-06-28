@@ -15,9 +15,10 @@ class PageController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pages = Page::orderBy('position', 'asc')->get();
+        $defult_lang=$request->lang ?? setting('default_language') ?? 'en';
+        $pages = Page::orderBy('position', 'asc')->where('lang', $defult_lang)->get();
         $length = $pages->count();
 
         return view('admin.pages.index', compact('pages', 'length'));
@@ -148,12 +149,19 @@ class PageController extends Controller
         if (is_array($positions)) {
             // Check for duplicate values in the positions array
             if (count($positions) !== count(array_unique($positions))) {
+                if ($request->expectsJson() || $request->ajax()) {
+                    return response()->json(['success' => false, 'message' => 'Duplicate position values are not allowed.'], 422);
+                }
                 return back()->with('error', 'Duplicate position values are not allowed.');
             }
 
             foreach ($positions as $id => $position) {
                 Page::where('id', $id)->update(['position' => $position]);
             }
+        }
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Page order updated successfully.']);
         }
 
         return redirect()->route('pages.index')->with('success', 'Page order updated successfully');

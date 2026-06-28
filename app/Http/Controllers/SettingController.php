@@ -22,7 +22,7 @@ class SettingController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
-            'default_language' => 'required|string|in:en,bn',
+            'default_language' => 'required|string|in:' . implode(',', array_keys(languages())),
         ]);
 
         Setting::set('site_name', $request->input('site_name'));
