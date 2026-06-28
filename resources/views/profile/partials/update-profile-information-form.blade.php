@@ -12,9 +12,27 @@
         @csrf
     </form>
 
-    <form method="post" action="{{ route('profile.update') }}" class="space-y-4">
+    <form method="post" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="space-y-4">
         @csrf
         @method('patch')
+
+        <div class="flex items-center gap-4 py-2">
+            <div class="relative w-16 h-16 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+                @if($user->profile_image)
+                    <img id="avatar-preview" src="{{ asset('storage/' . $user->profile_image) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                @else
+                    <div id="avatar-placeholder" class="text-slate-400 font-semibold text-lg uppercase">{{ substr($user->name, 0, 1) }}</div>
+                    <img id="avatar-preview" class="w-full h-full object-cover hidden">
+                @endif
+            </div>
+            <div>
+                <label for="profile_image" class="block text-sm font-medium text-slate-700 mb-1">{{ __('Profile Image') }}</label>
+                <input id="profile_image" name="profile_image" type="file" accept="image/*" class="text-sm text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+                @error('profile_image', 'updateProfileInformation')
+                    <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
 
         <div class="space-y-1">
             <label for="name" class="block text-sm font-medium text-slate-700">{{ __('Name') }}</label>
@@ -44,6 +62,22 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <div class="space-y-1">
+            <label for="position" class="block text-sm font-medium text-slate-700">{{ __('Position / Designation') }}</label>
+            <input id="position" name="position" type="text" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none" value="{{ old('position', $user->position) }}" placeholder="e.g. Senior Technology Writer, Guest Author">
+            @error('position', 'updateProfileInformation')
+                <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div class="space-y-1">
+            <label for="short_desc" class="block text-sm font-medium text-slate-700">{{ __('Short Description') }}</label>
+            <textarea id="short_desc" name="short_desc" rows="3" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none" placeholder="Write a short description about yourself...">{{ old('short_desc', $user->short_desc) }}</textarea>
+            @error('short_desc', 'updateProfileInformation')
+                <p class="text-sm text-rose-600 mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="flex items-center gap-4 pt-2">
