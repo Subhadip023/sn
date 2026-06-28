@@ -50,6 +50,57 @@
 
                 </section>
 
+                <!-- YouTube Embed -->
+                <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
+                    <h3 class="text-lg font-medium text-slate-900 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-rose-500" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                        YouTube Video
+                    </h3>
+
+                    <div class="space-y-2">
+                        <label for="video_url_input" class="block text-sm font-medium text-slate-700">Paste YouTube URL or Embed Link</label>
+                        <input
+                            type="text"
+                            id="video_url_input"
+                            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-brand-500 focus:outline-none transition-colors"
+                            placeholder="https://www.youtube.com/watch?v=..."
+                            value="{{ old('video_url') }}"
+                        >
+                        <input type="hidden" name="video_url" id="video_url" value="{{ old('video_url') }}">
+                        @error('video_url') <p class="text-sm text-rose-600 mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <!-- Preview + Insert Button -->
+                    <div id="yt_preview_wrapper" class="hidden space-y-3">
+                        <div class="flex items-center justify-between">
+                            <p class="text-xs font-medium text-slate-500 uppercase tracking-wide">Preview</p>
+                            <div class="flex items-center gap-2">
+                                <button type="button" id="yt_insert_btn"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-500 hover:bg-brand-400 text-white text-xs font-semibold transition-colors shadow-sm">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                    Insert into Content
+                                </button>
+                                <button type="button" id="yt_clear_btn" class="text-xs text-rose-400 hover:text-rose-600 transition-colors">&times; Remove</button>
+                            </div>
+                        </div>
+                        <div class="relative w-full rounded-lg overflow-hidden bg-black" style="padding-top: 56.25%;">
+                            <iframe
+                                id="yt_preview_iframe"
+                                class="absolute inset-0 w-full h-full"
+                                src=""
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                        <!-- Inserted confirmation toast -->
+                        <p id="yt_inserted_msg" class="hidden text-xs text-emerald-600 font-medium">&#10003; Embed inserted into content!</p>
+                    </div>
+
+                    <p id="yt_invalid_msg" class="hidden text-xs text-rose-500">Could not parse a valid YouTube URL. Try a standard watch or embed link.</p>
+                </section>
+
                 <!-- SEO Section -->
                 <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
                     <h3 class="text-lg font-medium text-slate-900">SEO Configuration</h3>
@@ -222,6 +273,8 @@
                     </div>
                 </section>
 
+
+
             </div>
         </div>
     </form>
@@ -369,6 +422,93 @@
                     $('#selected_tags_display').html('<span class="text-xs text-slate-400 italic empty-message">No tags selected</span>');
                 }
             });
+
+            // ── YouTube Embed Preview ─────────────────────────────────────
+            let currentVideoId = null; // track resolved ID for the Insert button
+
+            function extractYouTubeId(url) {
+                url = url.trim();
+                // Already an embed URL: https://www.youtube.com/embed/VIDEO_ID
+                let embedMatch = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+                if (embedMatch) return embedMatch[1];
+                // Standard watch URL: https://www.youtube.com/watch?v=VIDEO_ID
+                let watchMatch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+                if (watchMatch) return watchMatch[1];
+                // Short URL: https://youtu.be/VIDEO_ID
+                let shortMatch = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+                if (shortMatch) return shortMatch[1];
+                return null;
+            }
+
+            function applyYouTubeUrl(rawValue) {
+                const videoId = extractYouTubeId(rawValue);
+                const $preview = $('#yt_preview_wrapper');
+                const $iframe  = $('#yt_preview_iframe');
+                const $hidden  = $('#video_url');
+                const $invalid = $('#yt_invalid_msg');
+
+                if (rawValue === '') {
+                    currentVideoId = null;
+                    $preview.addClass('hidden');
+                    $iframe.attr('src', '');
+                    $hidden.val('');
+                    $invalid.addClass('hidden');
+                    return;
+                }
+
+                if (videoId) {
+                    currentVideoId = videoId;
+                    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                    $hidden.val(embedUrl);
+                    $iframe.attr('src', embedUrl);
+                    $preview.removeClass('hidden');
+                    $invalid.addClass('hidden');
+                    $('#yt_inserted_msg').addClass('hidden');
+                } else {
+                    currentVideoId = null;
+                    $preview.addClass('hidden');
+                    $iframe.attr('src', '');
+                    $hidden.val('');
+                    $invalid.removeClass('hidden');
+                }
+            }
+
+            // Restore preview on page load if old() value exists
+            const $ytInput = $('#video_url_input');
+            if ($ytInput.val()) {
+                applyYouTubeUrl($ytInput.val());
+            }
+
+            $ytInput.on('input paste', function() {
+                // Use setTimeout so paste event has time to fill the value
+                setTimeout(() => applyYouTubeUrl($(this).val()), 50);
+            });
+
+            $('#yt_clear_btn').on('click', function() {
+                $ytInput.val('');
+                applyYouTubeUrl('');
+            });
+
+            // Insert full <iframe> embed code into the Quill editor
+            $('#yt_insert_btn').on('click', function() {
+                if (!currentVideoId) return;
+
+                const iframeHtml = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${currentVideoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+
+                // Insert at current selection or at end of content
+                const range = quill.getSelection();
+                const index = range ? range.index : quill.getLength();
+                quill.clipboard.dangerouslyPasteHTML(index, iframeHtml, 'user');
+
+                // Show confirmation message briefly
+                const $msg = $('#yt_inserted_msg');
+                $msg.removeClass('hidden');
+                setTimeout(() => $msg.addClass('hidden'), 3000);
+
+                // Scroll editor into view
+                document.getElementById('editor').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+            // ─────────────────────────────────────────────────────────────
         });
     </script>
 

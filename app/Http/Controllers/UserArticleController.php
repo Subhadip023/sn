@@ -22,7 +22,6 @@ class UserArticleController extends Controller
 
         $pages = Page::where('active', true)->where('lang', app()->getLocale())->orderBy('position', 'asc')->get()->toArray();
         $latest_articles = Articles::where('status', 'published')->where('lang', app()->getLocale())->where('id', '!=', $article->id)->orderBy('created_at', 'desc')->take(5)->get();
-
         $meta = [
             'title'       => $article->meta_title ?? $article->title,
             'description' => $article->meta_description ?? $article->excerpt,

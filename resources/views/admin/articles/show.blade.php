@@ -2,12 +2,20 @@
       <div class="max-w-3xl mx-auto py-5">
             <header class="mb-8">
                 <span class="inline-block bg-primary-red text-white px-4 py-1.5 rounded text-sm mb-4">{{ $article->category->title }}</span>
-                <h1 class="text-4xl md:text-5xl font-semibold mb-4 leading-tight text-gray-800">{{ $article->title }}</h1>
+                <h1 class="text-4xl md:text-5xl font-semibold mb-4 leading-tight text-gray-800" @if(app()->getLocale()=='bn') style='line-height:1.3' @endif >{{ $article->title }}</h1>
                 <div class="flex flex-wrap items-center gap-5 text-sm text-gray-500 mb-5 pb-4 border-b border-gray-200">
-                    <span class="flex items-center"><i class="far fa-user mr-1.5"></i> {{ $article->author->name }}</span>
-                    <span class="flex items-center"><i class="far fa-calendar-alt mr-1.5"></i> {{ $article->published_at }}</span>
-                    <span class="flex items-center"><i class="far fa-clock mr-1.5"></i> 5 min read</span>
-                    <span class="flex items-center"><i class="far fa-comment mr-1.5"></i> 24 Comments</span>
+                    <span class="flex items-center gap-1.5">
+                        @if($article->author->profile_image)
+                            <img src="{{ asset('storage/' . $article->author->profile_image) }}" alt="{{ $article->author->name }}" class="w-5 h-5 rounded-full object-cover border border-gray-300 shrink-0">
+                        @else
+                            <span class="w-5 h-5 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center text-xs font-bold uppercase shrink-0">{{ substr($article->author->name, 0, 1) }}</span>
+                        @endif
+                        {{ $article->author->name }}
+                    </span>
+                    <span class="flex items-center"><i class="far fa-calendar-alt mr-1.5"></i> {{ ($article->published_at ?? $article->created_at)->format('M d, Y') }}</span>
+                    <span class="flex items-center"><i class="far fa-clock mr-1.5"></i>{{
+                         $article->created_at->diffForHumans() }} </span>
+                    <span class="flex items-center"><i class="far fa-eye mr-1.5"></i> {{ $article->views }}</span>
                     <div class="relative inline-block text-left" id="shareContainer">
                         <button type="button" onclick="toggleShareMenu()" class="flex items-center hover:text-primary-red transition-colors">
                             <i class="fas fa-share-alt mr-1.5"></i> Share
@@ -41,7 +49,17 @@
                  
                 
                 
-                <div class="prose prose-lg max-w-none text-gray-800">
+                <style>
+                    .article-content iframe {
+                        width: 100% !important;
+                        height: auto !important;
+                        aspect-ratio: 16 / 9;
+                        display: block;
+                        border-radius: 0.5rem;
+                        margin: 1rem 0;
+                    }
+                </style>
+                <div class="article-content prose prose-lg max-w-none text-gray-800">
                     {!! $article->content !!}
                 </div>
 

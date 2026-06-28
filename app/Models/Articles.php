@@ -27,8 +27,13 @@ class Articles extends Model
         'category_id',
         'author_id',
         'status',
+        'published_at',
         'views',
         'lang',
+    ];
+
+    protected $casts = [
+        'published_at' => 'datetime',
     ];
 
     public function category()
@@ -49,6 +54,20 @@ class Articles extends Model
             'article_id',
             'tag_id'
         )->withTimestamps();
+    }
+
+    /**
+     * Auto-set published_at when an article is first published.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (Articles $article) {
+            if ($article->status === 'published' && empty($article->published_at)) {
+                $article->published_at = now();
+            }
+        });
     }
 
     /**
