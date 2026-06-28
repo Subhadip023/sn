@@ -16,6 +16,9 @@
   <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 <script src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
+<script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
+
   <style>
 
 
@@ -290,6 +293,128 @@
   <script src="{{ asset('js/script.js') }}"></script>
 
 
+  
+
+  <div id="cropModal"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+
+    <div class="bg-white rounded-lg p-6 w-[700px]">
+
+        <img id="cropImage" class="max-w-full">
+
+        <div class="flex justify-end gap-2 mt-4">
+            <button type="button"
+                id="cancelCrop"
+                class="px-4 py-2 border rounded">
+                Cancel
+            </button>
+
+            <button type="button"
+                id="cropSave"
+                class="px-4 py-2 bg-blue-600 text-white rounded">
+                Crop
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+// Image Cropper Logic
+let cropper = null;
+let currentInput = null;
+let currentOptions = null;
+
+function initImageCropper(options) {
+    const input = document.querySelector(options.input);
+    if (!input) return;
+
+    input.addEventListener("change", function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        currentInput = input;
+        currentOptions = options;
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const modal = document.getElementById("cropModal");
+            const image = document.getElementById("cropImage");
+
+            image.src = event.target.result;
+            modal.classList.remove("hidden");
+
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            cropper = new Cropper(image, {
+                aspectRatio: options.aspectRatio,
+                viewMode: 1,
+                autoCropArea: 1,
+                responsive: true,
+            });
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+const cropSaveBtn = document.getElementById("cropSave");
+if (cropSaveBtn) {
+    cropSaveBtn.addEventListener("click", function () {
+        if (!cropper) return;
+
+        cropper.getCroppedCanvas({
+            width: currentOptions.width,
+            height: currentOptions.height,
+        }).toBlob(function (blob) {
+            const file = new File(
+                [blob],
+                "cropped.png",
+                { type: "image/png" }
+            );
+
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            currentInput.files = dt.files;
+
+            cropper.destroy();
+            cropper = null;
+
+            document.getElementById("cropModal").classList.add("hidden");
+        });
+    });
+}
+
+const cancelCropBtn = document.getElementById("cancelCrop");
+if (cancelCropBtn) {
+    cancelCropBtn.addEventListener("click", function () {
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        currentInput.value = "";
+        document.getElementById("cropModal").classList.add("hidden");
+    });
+}
+
+// Initialize image croppers
+initImageCropper({
+    input: "#site_logo",
+    aspectRatio: 3,
+    width: 900,
+    height: 300,
+});
+
+initImageCropper({
+    input: "#site_favicon",
+    aspectRatio: 1,
+    width: 64,
+    height: 64,
+});
+
+</script>
 </body>
 
 </html>
