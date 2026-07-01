@@ -38,7 +38,7 @@
                             <div>{{ $article->title }}</div>
                             <div class="text-xs text-slate-400">{{ $article->slug }}</div>
                         </td>
-                        <td class="py-2 text-slate-600">{{ $article->author->name ?? 'Unknown' }}</td>
+                        <td class="py-2 text-slate-600">{{ $article->manualAuthor->name ?? ($article->author->name ?? 'Unknown') }}</td>
                         <td class="py-2 text-slate-600">{{ $article->category->title ?? 'Uncategorized' }}</td>
                         <td class="py-2 text-slate-600">{{ $article->tags->implode('title', ', ') ?? '-' }}</td>
                         <td class="py-2 text-slate-600 uppercase">{{ $article->lang }}</td>

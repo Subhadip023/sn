@@ -25,7 +25,7 @@
                 </h1>
                 <p class="text-lg text-gray-800 my-4">{{ $top_story->excerpt ?? Str::limit(strip_tags($top_story->content), 150) }}</p>
                 <div class="flex items-center text-sm text-gray-600 space-x-4">
-                    <span>By {{ $top_story->author->name ?? 'Author' }}</span>
+                    <span>By {{ $top_story->manualAuthor->name ?? ($top_story->author->name ?? 'Author') }}</span>
                     <span>|</span>
                     <span>{{ $top_story->created_at->diffForHumans() }}</span>
                     <span>|</span>

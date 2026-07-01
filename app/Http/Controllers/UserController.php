@@ -98,13 +98,14 @@ class UserController extends Controller
             return redirect()->route('admin.users')->with('error', 'You cannot delete your own account.');
         }
 
-        // Reassign the user's articles to the deleting administrator
-        \App\Models\Articles::where('author_id', $user->id)->update([
-            'author_id' => auth()->id()
-        ]);
+        $hasArticles = \App\Models\Articles::where('author_id', $user->id)->exists();
 
         $user->delete();
 
-        return redirect()->route('admin.users')->with('success', 'User deleted successfully. Their articles have been reassigned to you.');
+        $message = $hasArticles 
+            ? 'User deleted successfully. A manual author has been created with their details, and their articles have been linked to them.'
+            : 'User deleted successfully.';
+
+        return redirect()->route('admin.users')->with('success', $message);
     }
 }
