@@ -19,7 +19,7 @@
             <div class="py-5">
                 <span class="inline-block bg-primary-red text-white px-3 py-1 rounded text-xs font-semibold uppercase mb-4">{{ $top_story->category->title ?? __('TOP STORY') }}</span>
                 <h1 class="text-3xl md:text-4xl font-semibold mb-4 leading-tight">
-                    <a href="{{ url('/article/' . $top_story->slug) }}" class="hover:text-primary-red transition-colors">
+                    <a href="{{ url('/article/' . $top_story->slug) }}" class="hover:text-primary-red transition-colors" @if(app()->getLocale()=='bn') style='line-height:1.3' @endif>
                         {{ $top_story->title }}
                     </a>
                 </h1>
@@ -34,7 +34,7 @@
             </div>
             <div>
                 <a href="{{ url('/article/' . $top_story->slug) }}">
-                    <img src="{{ $top_story->featured_image ? asset('storage/' . $top_story->featured_image) : 'https://picsum.photos/800/450?random=1' }}" alt="{{ $top_story->title }}" class="w-full h-auto rounded-lg shadow-lg hover:opacity-90 transition-opacity">
+                    <img src="{{ $top_story->featured_image ? asset('storage/' . $top_story->featured_image) : 'https://picsum.photos/800/450?random=1' }}" alt="{{ $top_story->title }}" class="w-full h-auto rounded-lg shadow-lg hover:opacity-90 transition-opacity" @if(app()->getLocale()=='bn') style='min-height:300px;object-fit:cover;' @endif>
                 </a>
             </div>
         </section>
@@ -46,10 +46,10 @@
             <a href="{{ url('/article/' . $article->slug) }}" class="group border border-gray-200 rounded-lg overflow-hidden hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
                 <div class="relative h-48 overflow-hidden">
                     <img src="{{ $article->featured_image ? asset('storage/' . $article->featured_image) : 'https://picsum.photos/400/225?random=' . $loop->index }}" alt="{{ $article->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                    <span class="absolute bottom-2.5 left-2.5 bg-primary-blue text-white px-2.5 py-1 rounded text-xs font-semibold uppercase">{{ $article->category->title ?? 'News' }}</span>
+                    <span class="absolute bottom-2.5 left-2.5 bg-primary-blue text-white px-2.5 py-1 rounded text-xs font-semibold uppercase" @if(app()->getLocale()=='bn') style='font-family: Hind Siliguri, sans-serif;' @endif>{{ $article->category->title ?? 'News' }}</span>
                 </div>
                 <div class="p-4">
-                    <h3 class="text-lg font-semibold mb-2 group-hover:text-primary-red transition-colors line-clamp-2">{{ $article->title }}</h3>
+                    <h3 class="text-lg font-semibold mb-2 group-hover:text-primary-red transition-colors line-clamp-2" @if(app()->getLocale()=='bn') style='font-family: Hind Siliguri, sans-serif;' @endif>{{ $article->title }}</h3>
                     <p class="text-sm text-gray-600">{{ $article->created_at->diffForHumans() }}</p>
                 </div>
             </a>
@@ -67,7 +67,7 @@
                 <div class="flex py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors">
                     <div class="flex-1 pr-4">
                         <h4 class="font-medium mb-1 line-clamp-2">
-                            <a href="{{ url('/article/' . $article->slug) }}" class="hover:text-primary-red transition-colors">
+                            <a href="{{ url('/article/' . $article->slug) }}" class="hover:text-primary-red transition-colors" @if(app()->getLocale()=='bn') style='font-family: Hind Siliguri, sans-serif;' @endif>
                                 {{ $article->title }}
                             </a>
                         </h4>
